@@ -82,6 +82,26 @@ export default class DepartmentEditScreen extends React.Component {
 
     arrTeste = []
 
+    setValores = (nome, ativo, index) => {
+        let aux = { nome, ativo }
+        this.arrTeste.push(aux)
+        console.log(this.arrTeste)
+        if (index == this.state.qtdDepartamentos) {
+            this.setState({ newNome: this.arrTeste })
+            return this.arrTeste
+        }
+        return this.arrTeste[index]
+        // return {nome, ativo, index}
+    }
+    
+    deleteUser = async (id) => {
+        let res = await axios.delete(`${Api.EndPoint.URL}/departamentos/${id}`);
+        let data = res.data;
+        console.log(data);
+
+        this.props.navigation.goBack()
+    }
+
     render() {
         return (
             <SafeAreaProvider>
@@ -94,10 +114,15 @@ export default class DepartmentEditScreen extends React.Component {
                             !this.state.isLoading ?
                                 this.state.departmentData.map((item, i) => {
 
-                                    let nomeAux = item.nome
-                                    let ativoAux = item.ativo
-                                    let aux = { nomeAux, ativoAux }
-                                    this.arrTeste.push(aux)
+                                    // let nomeAux = item.nome
+                                    // let ativoAux = item.ativo
+                                    // let aux = { nomeAux, ativoAux }
+                                    // this.arrTeste.push(aux)
+                                    // console.log(this.arrTeste)
+
+                                    // if (i == this.state.qtdDepartamentos) {
+                                    //     this.setState({ newNome: this.arrTeste })
+                                    // }
 
                                     return (<View key={item.id} style={styles.itemsContainer_box}>
 
@@ -116,9 +141,8 @@ export default class DepartmentEditScreen extends React.Component {
                                                 </View>
                                                 <TextInput
                                                     style={{ width: layouts.window.width * 0.5, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555' }}
-                                                    onChangeText={value => this.arrTeste[i].nomeAux = value }
-                                                    // editable={this.state.isFieldEditable}
-                                                    secureTextEntry={false} value={this.arrTeste[i].nomeAux} placeholder='Departamento'
+                                                    onChangeText={value => value }
+                                                    secureTextEntry={false} value={item.nome} placeholder='Departamento'
                                                 
                                                 onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} placeholderTextColor="#555" />
                                             </View>
@@ -139,7 +163,7 @@ export default class DepartmentEditScreen extends React.Component {
                                             </View>
                                         </TouchableWithoutFeedback>
 
-                                        {/* <View style={{ width: '100%', paddingTop: 10, paddingBottom: 5, alignItems: 'center' }}>
+                                        <View style={{width:'100%',paddingTop:10,paddingBottom:5,justifyContent:'space-around',alignItems:'center',flexDirection:'row'}}>
                                             <TouchableWithoutFeedback onPress={() => {
                                                 Alert.alert(
                                                     "Deseja salvar as alterações?", '',
@@ -160,7 +184,21 @@ export default class DepartmentEditScreen extends React.Component {
                                             }}>
                                                 <Text style={{ color: '#EEE', fontSize: 16, marginTop: 5 }}>Salvar</Text>
                                             </TouchableWithoutFeedback>
-                                        </View> */}
+
+                                            <TouchableWithoutFeedback onPress={() => {
+                                                Alert.alert(
+                                                    "Deseja excluir sua conta?", '',
+                                                    [
+                                                        {
+                                                            text: "Excluir", onPress: () => this.saveChanges(item.id)
+                                                        },
+                                                        { text: "Cancelar", onPress: () => console.log('Cancelar') }
+                                                    ], { cancelable: true }
+                                                )
+                                            }}>
+                                                <Text style={{ color: 'rgba(255,0,0,0.8)', fontSize: 16, marginTop: 5 }}>Excluir</Text>
+                                            </TouchableWithoutFeedback>
+                                        </View>
 
                                         {/* ---------------------------------------------------------------------------------------------------------------------- */}
 

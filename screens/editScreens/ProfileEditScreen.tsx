@@ -69,6 +69,16 @@ export default class ProfileEditScreen extends React.Component {
         this.props.navigation.goBack()
     }
 
+    deleteUser = async (id) => {
+        let payloadSave = { id: id, nome: null, login: null, senha: null, ativo: null, administrador: null }
+        let res = await axios.delete(`${Api.EndPoint.URL}/usuarios/${id}`);
+        let data = res.data;
+        console.log(data);
+
+        this.userData(payloadSave)
+        this.props.navigation.goBack()
+    }
+
     render() {
         return (
             <SafeAreaProvider>
@@ -159,6 +169,27 @@ export default class ProfileEditScreen extends React.Component {
                         {/* <ItemMenu title="Nome" valor={this.state.UserData.nome} />
                         <ItemMenu title="Login" valor={this.state.UserData.login} />
                         <ItemMenu title="Senha" valor={this.state.UserData.senha} /> */}
+                    </View>
+                    <View style={{width:layouts.window.width,alignItems:'center',paddingVertical:100}}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                Alert.alert(
+                                    "Deseja excluir sua conta?", '',
+                                    [
+                                        { text: "Excluir", onPress: () => this.deleteUser(this.state.UserData.id) },
+                                        { text: "Cancelar", onPress: () => console.log('Cancelar') }
+                                    ], { cancelable: true }
+                                )
+                            }}
+                            style={{backgroundColor:'rgba(120,0,0,0.7)',
+                                paddingVertical:20,
+                                paddingHorizontal:30,
+                                borderRadius:layouts.window.width*0.05,
+                                borderWidth:1,
+                                borderColor:'rgba(250,250,250,0.2)'
+                            }}>
+                            <Text style={{color:'#EEE',fontSize:16,fontWeight:'bold'}}>Excluir Conta</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </SafeAreaProvider>
