@@ -1,4 +1,3 @@
-import { StackScreenProps } from '@react-navigation/stack';
 import { Ionicons, AntDesign, MaterialCommunityIcons, Entypo, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
@@ -13,6 +12,7 @@ import {
     Image,
     TouchableWithoutFeedback,
     TextInput,
+    FlatList,
     ScrollView,
     ActivityIndicator
 } from 'react-native';
@@ -25,10 +25,99 @@ import layouts from '../../constants/Layout';
 import images from '../../constants/images';
 import colors from '../../constants/Colors';
 
-export default class DepartmentEditScreen extends React.Component {
+function Item({ id, name, active, idUser, nav }) {
 
-    // Dados a alterar do departamento
-    // { "id": 1, "usuarioCadastro": { "id": 2 }, "departamento": { "id": 2 }, "nome": "Ar Condicionado Split", "ativo": true, "ligado": false, "path": "001-07" }
+    const [fieldNameValue, setFieldNameValue] = useState(name)
+    const [fieldActiveValue, setFieldActiveValue] = useState(active)
+
+    const saveDepartmentChanges = async (id, idUsuario) => {
+        let payload = {
+            Id: id,
+            UsuarioCadastro: { id: idUsuario },
+            Nome: fieldNameValue,
+            Ativo: fieldActiveValue
+        }
+        console.log('payload');
+        console.log(payload);
+        console.log('---');
+        let res = await axios.put(`${Api.EndPoint.URL}/departamentos/${id}`, payload);
+        let data = res.data;
+        console.log(data);
+
+        nav.goBack()
+    }
+
+    const deleteUser = async id => {
+        let res = await axios.delete(`${Api.EndPoint.URL}/departamentos/${id}`);
+        let data = res.data;
+        console.log(data);
+
+        nav.goBack()
+    }
+
+    return (
+        <View key={id} style={styles.itemsContainer_box}>
+            <View style={{ paddingVertical: 10 }}>
+                <Text style={{ color: '#EEE', fontSize: 18 }}>{name}</Text>
+            </View>
+
+            <TouchableWithoutFeedback
+                style={styles.itemContainer}>
+                <View style={styles.itemContainer}>
+                    <View style={styles.imgContainer}>
+                        <TabBarIconType2 name="home" color={'#CCC'} />
+                    </View>
+                    <TextInput
+                        style={{ width: layouts.window.width * 0.5, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555' }}
+                        onChangeText={value => setFieldNameValue(value)} placeholder='Departamento'
+                        secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
+                </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback
+                style={styles.itemContainer}>
+                <View style={styles.itemContainer}>
+                    <View style={styles.imgContainer}>
+                        <TabBarIconType5 name="online-prediction" color={'#CCC'} />
+                    </View><Switch
+                        trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
+                        thumbColor={active ? "#BBB" : "#BBB"}
+                        onValueChange={() => setFieldActiveValue(!fieldActiveValue)}
+                        value={fieldActiveValue}
+                        style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+                    />
+                </View>
+            </TouchableWithoutFeedback>
+
+            <View style={{ width: '100%', paddingTop: 10, paddingBottom: 5, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
+                <TouchableWithoutFeedback onPress={() =>
+                    Alert.alert(
+                        "Deseja salvar as alterações?", '',
+                        [
+                            { text: "Sim", onPress: () => saveDepartmentChanges(id, idUser) },
+                            { text: "Não", style: 'cancel', onPress: () => console.log('Cancelar Salvamento de Departamento') }
+                        ], { cancelable: true }
+                    )}>
+                    <Text style={{ color: '#EEE', fontSize: 16, marginTop: 5 }}>Salvar</Text>
+                </TouchableWithoutFeedback>
+
+                <TouchableWithoutFeedback onPress={() => {
+                    Alert.alert(
+                        "Deseja excluir sua conta?", '',
+                        [
+                            { text: "Excluir", onPress: () => deleteUser(id) },
+                            { text: "Cancelar", style: 'cancel', onPress: () => console.log('Cancelar Exclusão de Departamento') }
+                        ], { cancelable: true }
+                    )
+                }}>
+                    <Text style={{ color: 'rgba(255,0,0,0.8)', fontSize: 16, marginTop: 5 }}>Excluir</Text>
+                </TouchableWithoutFeedback>
+            </View>
+        </View>
+    )
+}
+
+export default class DepartmentEditScreen extends React.Component {
 
     state = {
         UserData: {},
@@ -38,8 +127,8 @@ export default class DepartmentEditScreen extends React.Component {
         newNome: [],
         newAtivo: false,
         qtdDepartamentos: 0,
+        aux: null
     }
-
     async componentDidMount() {
         try {
             const UserData = await AsyncStorage.getItem('@UserData')
@@ -51,55 +140,12 @@ export default class DepartmentEditScreen extends React.Component {
         } catch (e) { console.log('Error "@UserEmail": ' + e) }
 
         await axios.get(`${Api.EndPoint.URL}/departamentos`)
-            .then(res =>
-                {
-                    console.log(res.data)
-                    this.setState({ departmentData: res.data })
-                }
-            )
+            .then(res => {
+                console.log(res.data)
+                this.setState({ departmentData: res.data })
+            })
             .then(res => this.setState({ isLoading: false, qtdDepartamentos: this.state.departmentData.length }))
             .catch(err => console.error(`Erro no Get de departamentos: ${err}`))
-    }
-
-    saveChanges = async (id, idUsuario, name, active) => {
-        // let payload = { 
-        //     Id: id,
-        //     UsuarioCadastro: { id: idUsuario }, 
-        //     Nome: nome, 
-        //     Ativo: active 
-        // }
-        // console.log('payloadSend');
-        // console.log(payloadSend);
-        // console.log('---');
-        // let res = await axios.put(`${Api.EndPoint.URL}/departamentos/${id}`, payload);
-        // let data = res.data;
-        // console.log(data);
-
-        // this.props.navigation.goBack()
-        // alert(id)
-        console.log(this.arrTeste)
-    }
-
-    arrTeste = []
-
-    setValores = (nome, ativo, index) => {
-        let aux = { nome, ativo }
-        this.arrTeste.push(aux)
-        console.log(this.arrTeste)
-        if (index == this.state.qtdDepartamentos) {
-            this.setState({ newNome: this.arrTeste })
-            return this.arrTeste
-        }
-        return this.arrTeste[index]
-        // return {nome, ativo, index}
-    }
-    
-    deleteUser = async (id) => {
-        let res = await axios.delete(`${Api.EndPoint.URL}/departamentos/${id}`);
-        let data = res.data;
-        console.log(data);
-
-        this.props.navigation.goBack()
     }
 
     render() {
@@ -109,107 +155,16 @@ export default class DepartmentEditScreen extends React.Component {
                     <View style={styles.itemsContainer_img}>
                         <Image style={styles.imgUser} source={images.Department.manageDepartmentUri} />
                     </View>
-                    <ScrollView style={{ width: layouts.window.width, paddingHorizontal: layouts.window.width * 0.1 }}>
+                    <View style={{ width: layouts.window.width, paddingHorizontal: layouts.window.width * 0.1 }}>
                         {
                             !this.state.isLoading ?
-                                this.state.departmentData.map((item, i) => {
-
-                                    // let nomeAux = item.nome
-                                    // let ativoAux = item.ativo
-                                    // let aux = { nomeAux, ativoAux }
-                                    // this.arrTeste.push(aux)
-                                    // console.log(this.arrTeste)
-
-                                    // if (i == this.state.qtdDepartamentos) {
-                                    //     this.setState({ newNome: this.arrTeste })
-                                    // }
-
-                                    return (<View key={item.id} style={styles.itemsContainer_box}>
-
-                                        <View style={{ paddingVertical: 10 }}>
-                                            <Text style={{ color: '#EEE', fontSize: 18 }}>{item.nome}</Text>
-                                        </View>
-
-                                        {/* Teste sem reaproveitamento de código (Funcionou) - Revisar Depois */}
-                                        {/* ---------------------------------------------------------------------------------------------------------------------- */}
-
-                                        <TouchableWithoutFeedback
-                                            style={styles.itemContainer}>
-                                            <View style={styles.itemContainer}>
-                                                <View style={styles.imgContainer}>
-                                                    <TabBarIconType2 name="home" color={'#CCC'} />
-                                                </View>
-                                                <TextInput
-                                                    style={{ width: layouts.window.width * 0.5, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555' }}
-                                                    onChangeText={value => value }
-                                                    secureTextEntry={false} value={item.nome} placeholder='Departamento'
-                                                
-                                                onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} placeholderTextColor="#555" />
-                                            </View>
-                                        </TouchableWithoutFeedback>
-
-                                        <TouchableWithoutFeedback
-                                            style={styles.itemContainer}>
-                                            <View style={styles.itemContainer}>
-                                                <View style={styles.imgContainer}>
-                                                    <TabBarIconType5 name="online-prediction" color={'#CCC'} />
-                                                </View><Switch
-                                                    trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
-                                                    thumbColor={item.ativo ? "#BBB" : "#BBB"}
-                                                    onValueChange={() => this.setState({ newAtivo: !item.ativo })}
-                                                    value={item.ativo}
-                                                    style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-                                                />
-                                            </View>
-                                        </TouchableWithoutFeedback>
-
-                                        <View style={{width:'100%',paddingTop:10,paddingBottom:5,justifyContent:'space-around',alignItems:'center',flexDirection:'row'}}>
-                                            <TouchableWithoutFeedback onPress={() => {
-                                                Alert.alert(
-                                                    "Deseja salvar as alterações?", '',
-                                                    [
-                                                        {
-                                                            text: "Sim", onPress: () => this.saveChanges(
-                                                                this.state.UserData.id,
-                                                                this.state.newNome,
-                                                                this.state.newLogin,
-                                                                this.state.newSenha,
-                                                                this.state.UserData.ativo,
-                                                                this.state.UserData.administrador
-                                                            )
-                                                        },
-                                                        { text: "Não", onPress: () => console.log('Cancelar') }
-                                                    ], { cancelable: true }
-                                                )
-                                            }}>
-                                                <Text style={{ color: '#EEE', fontSize: 16, marginTop: 5 }}>Salvar</Text>
-                                            </TouchableWithoutFeedback>
-
-                                            <TouchableWithoutFeedback onPress={() => {
-                                                Alert.alert(
-                                                    "Deseja excluir sua conta?", '',
-                                                    [
-                                                        {
-                                                            text: "Excluir", onPress: () => this.saveChanges(item.id)
-                                                        },
-                                                        { text: "Cancelar", onPress: () => console.log('Cancelar') }
-                                                    ], { cancelable: true }
-                                                )
-                                            }}>
-                                                <Text style={{ color: 'rgba(255,0,0,0.8)', fontSize: 16, marginTop: 5 }}>Excluir</Text>
-                                            </TouchableWithoutFeedback>
-                                        </View>
-
-                                        {/* ---------------------------------------------------------------------------------------------------------------------- */}
-
-                                        {/* <ItemMenu title="Nome" valor={this.state.UserData.nome} />
-                                            <ItemMenu title="Login" valor={this.state.UserData.login} />
-                                            <ItemMenu title="Senha" valor={this.state.UserData.senha} /> */}
-                                    </View>)
-                                }) : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
+                                <FlatList data={this.state.departmentData}
+                                    renderItem={({ item }) => (
+                                        <Item id={item.id} idUser={this.state.UserData.id} name={item.nome} active={item.ativo}
+                                            deptsList={this.state.departmentData} nav={this.props.navigation} />
+                                    )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
-                    </ScrollView>
-                    {/* <ItemDepartamento departmentData={this.state.departmentData} /> */}
+                    </View>
                 </View>
             </SafeAreaProvider>
         );

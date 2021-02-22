@@ -15,12 +15,13 @@ export default class ProfileScreen extends React.Component {
 
     state = {
         userName: '',
+        isUserAdmin: false,
     }
 
     async componentDidMount() {
         try {
             const UserData = await AsyncStorage.getItem('@UserData')
-            if (UserData !== null) { this.setState({ userName: JSON.parse(UserData).nome }) }
+            if (UserData !== null) { this.setState({ userName: JSON.parse(UserData).nome, isUserAdmin: JSON.parse(UserData).administrador }) }
         } catch (e) { console.log('Error "@UserEmail": ' + e) }
     }
 
@@ -37,7 +38,11 @@ export default class ProfileScreen extends React.Component {
                     </View>
                     <View style={styles.itemsContainer_box}>
                         <ItemMenu title="Editar Perfil" nav={this.props.navigation} screen="ProfileEditScreen" isExit={false} />
-                        <ItemMenu title="Editar Departamentos" nav={this.props.navigation} screen="DepartmentEditScreen" isExit={false} />
+                        {
+                            this.state.isUserAdmin ?
+                                <ItemMenu title="Editar Departamentos" nav={this.props.navigation} screen="DepartmentEditScreen" isExit={false} /> :
+                                null
+                        }
                         <ItemMenu title="Editar Dispositivos" nav={this.props.navigation} screen="DevicesEditScreen" isExit={false} />
                         {/* <ItemMenu title="Configurações" nav={this.props.navigation} screen="SettingsScreen" isExit={false} /> */}
                         <ItemMenu title="Sair" nav={this.props.navigation} screen="" isExit={true} />

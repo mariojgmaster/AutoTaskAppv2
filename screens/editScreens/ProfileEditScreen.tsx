@@ -83,7 +83,7 @@ export default class ProfileEditScreen extends React.Component {
         return (
             <SafeAreaProvider>
                 <View style={styles.container}>
-                    <View style={{ width: layouts.window.width, paddingBottom: 30, paddingRight: 20, alignItems: 'flex-end' }}>
+                    <View style={{ width: layouts.window.width, paddingBottom: 30, paddingRight: 30, alignItems: 'flex-end' }}>
                         <TouchableWithoutFeedback onPress={() => {
                             Alert.alert(
                                 "Deseja salvar as alterações?", '',
@@ -109,66 +109,45 @@ export default class ProfileEditScreen extends React.Component {
                         <Image style={styles.imgUser} source={images.User.manageUserUri} />
                     </View>
                     <View style={styles.itemsContainer_box}>
-
-                        {/* Teste sem reaproveitamento de código (Funcionou) - Revisar Depois */}
-                        {/* ---------------------------------------------------------------------------------------------------------------------- */}
-
                         <TouchableWithoutFeedback
-                            onPress={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })}
                             style={styles.itemContainer}>
                             <View style={styles.itemContainer}>
                                 <View style={styles.imgContainer}>
-                                    <TabBarIconType3 name="account-edit-outline" color={this.state.isFieldEditable ? colors.Profile.icon : '#CCC'} />
+                                    <TabBarIconType3 name="account-edit-outline" color="#CCC" />
                                 </View>
                                 <TextInput
-                                    style={ this.state.isFieldEditable ? [styles.inputs, styles.inputs_name] :
-                                            {width:layouts.window.width*0.5,color:'#AAA',borderBottomWidth:1,borderBottomColor:'#555'}}
+                                    style={[styles.inputs, styles.inputs_name]}
                                     onChangeText={value => this.setState({ newNome: value })}
-                                    // editable={this.state.isFieldEditable}
                                     secureTextEntry={false} value={this.state.newNome} placeholder='Nome'
-                                    onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} placeholderTextColor="#555" />
+                                    placeholderTextColor="#555" />
                             </View>
                         </TouchableWithoutFeedback>
 
-                        <TouchableWithoutFeedback
-                            onPress={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })}
-                            style={styles.itemContainer}>
+                        <TouchableWithoutFeedback style={styles.itemContainer}>
                             <View style={styles.itemContainer}>
                                 <View style={styles.imgContainer}>
-                                    <TabBarIconType4 name="email" color={this.state.isFieldEditable ? colors.Profile.icon : '#CCC'} />
+                                    <TabBarIconType4 name="email" color="#CCC" />
                                 </View>
                                 <TextInput
-                                    style={ this.state.isFieldEditable ? [styles.inputs, styles.inputs_name] :
-                                            {width:layouts.window.width*0.5,color:'#AAA',borderBottomWidth:1,borderBottomColor:'#555'}}
+                                    style={[styles.inputs, styles.inputs_name]}
                                     onChangeText={value => this.setState({ newLogin: value })}
-                                    // editable={this.state.isFieldEditable}
                                     secureTextEntry={false} value={this.state.newLogin} placeholder='Login'
-                                    onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} placeholderTextColor="#555" />
+                                    placeholderTextColor="#555" />
                             </View>
                         </TouchableWithoutFeedback>
 
-                        <TouchableWithoutFeedback
-                            onPress={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })}
-                            style={styles.itemContainer}>
+                        <TouchableWithoutFeedback style={styles.itemContainer}>
                             <View style={styles.itemContainer}>
                                 <View style={styles.imgContainer}>
-                                    <TabBarIconType3 name="form-textbox-password" color={this.state.isFieldEditable ? colors.Profile.icon : '#CCC'} />
+                                    <TabBarIconType3 name="form-textbox-password" color="#CCC" />
                                 </View>
                                 <TextInput
-                                    style={ this.state.isFieldEditable ? [styles.inputs, styles.inputs_name] :
-                                            {width:layouts.window.width*0.5,color:'#AAA',borderBottomWidth:1,borderBottomColor:'#555'}}
+                                    style={[styles.inputs, styles.inputs_name]}
                                     onChangeText={value => this.setState({ newSenha: value })}
-                                    // editable={this.state.isFieldEditable}
                                     secureTextEntry={true} value={this.state.newSenha} placeholder='Senha'
-                                    onBlur={() => this.setState({ isFieldEditable: !this.state.isFieldEditable })} placeholderTextColor="#555" />
+                                    placeholderTextColor="#555" />
                             </View>
                         </TouchableWithoutFeedback>
-
-                        {/* ---------------------------------------------------------------------------------------------------------------------- */}
-
-                        {/* <ItemMenu title="Nome" valor={this.state.UserData.nome} />
-                        <ItemMenu title="Login" valor={this.state.UserData.login} />
-                        <ItemMenu title="Senha" valor={this.state.UserData.senha} /> */}
                     </View>
                     <View style={{width:layouts.window.width,alignItems:'center',paddingVertical:100}}>
                         <TouchableOpacity
@@ -181,14 +160,14 @@ export default class ProfileEditScreen extends React.Component {
                                     ], { cancelable: true }
                                 )
                             }}
-                            style={{backgroundColor:'rgba(120,0,0,0.7)',
+                            style={{backgroundColor:'rgba(120,0,0,0.6)',
                                 paddingVertical:20,
                                 paddingHorizontal:30,
                                 borderRadius:layouts.window.width*0.05,
                                 borderWidth:1,
-                                borderColor:'rgba(250,250,250,0.2)'
+                                borderColor:'rgba(250,250,250,0.1)'
                             }}>
-                            <Text style={{color:'#EEE',fontSize:16,fontWeight:'bold'}}>Excluir Conta</Text>
+                            <Text style={{color:'#DDD',fontSize:16,fontWeight:'bold'}}>Excluir Conta</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -306,9 +285,9 @@ const styles = StyleSheet.create({
         color: colors.DrawerContent.text,
     },
     inputs: {
-        width: layouts.window.width * 0.7,
-        color: colors.DrawerContent.text,
-        borderBottomColor: colors.DrawerContent.text,
+        width: layouts.window.width * 0.6,
+        color: '#CCC',
+        borderBottomColor: '#CCC',
         borderBottomWidth: 2,
     },
 })
