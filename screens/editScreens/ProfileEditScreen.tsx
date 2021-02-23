@@ -75,6 +75,7 @@ export default class DevicesEditScreen extends React.Component {
                                             login={item.login}
                                             password={item.senha}
                                             isAdmin={item.administrador}
+                                            isUserSisAdmin={this.state.UserDataSis.administrador}
                                             userIdSis={this.state.UserDataSis.id}
                                             nav={this.props.navigation} />
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
@@ -94,7 +95,7 @@ const showToast = text => {
     )
 }
 
-function Item({ id, name, login, password, active, userIdSis, isAdmin, nav }) {
+function Item({ id, name, login, password, active, userIdSis, isAdmin, isUserSisAdmin, nav }) {
 
     const [fieldNameValue, setFieldNameValue] = useState(name)
     const [fieldLoginValue, setFieldLoginValue] = useState(login)
@@ -175,18 +176,21 @@ function Item({ id, name, login, password, active, userIdSis, isAdmin, nav }) {
                         secureTextEntry={true} defaultValue={fieldPasswordValue} placeholderTextColor="#555" />
                 </View>
 
-                <View style={[styles.itemContainer, {justifyContent:'center'}]}>
-                    <View style={styles.imgContainer}>
-                        <TabBarIconType5 name="online-prediction" color={'#CCC'} />
-                    </View>
-                    <Switch
-                        trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
-                        thumbColor="#BBB"
-                        onValueChange={() => setFieldActiveValue(!fieldActiveValue)}
-                        value={fieldActiveValue}
-                        style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-                    />
-                </View>
+                {
+                    !isUserSisAdmin ? null:
+                        <View style={[styles.itemContainer, {justifyContent:'center'}]}>
+                            <View style={styles.imgContainer}>
+                                <TabBarIconType5 name="online-prediction" color={'#CCC'} />
+                            </View>
+                            <Switch
+                                trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
+                                thumbColor="#BBB"
+                                onValueChange={() => setFieldActiveValue(!fieldActiveValue)}
+                                value={fieldActiveValue}
+                                style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+                            />
+                        </View>
+                }
             </View>
 
             <View style={{ width: '100%', paddingTop: 10, paddingBottom: 5, paddingHorizontal: 20, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
