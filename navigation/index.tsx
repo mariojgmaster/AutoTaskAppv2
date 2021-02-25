@@ -20,7 +20,10 @@ import SignInScreen from '../screens/authScreens/SignInScreen';
 import SignUpScreen from '../screens/authScreens/SignUpScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
+let colorSchemeM;
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+	{colorSchemeM = colorScheme}
 	return (<Application colorScheme={colorScheme} />);
 }
 
@@ -188,9 +191,12 @@ class Application extends React.Component {
 
 const AppStack = createStackNavigator<RootStackParamList>();
 function RootNavigator() {
+	// Lembrar deste modo de passar parametros atraves das rotas de navegação.
+	// TODO: Refazer authentication e navigation flows
+	// const callTest = (a, b) => alert(a+b)
 	return (
 		<AppStack.Navigator screenOptions={{ headerShown: false }}>
-			<AppStack.Screen name="Root" component={BottomTabNavigator} />
+			<AppStack.Screen name="Root" initialParams={{ /*testar: callTest,*/ colorScheme: colorSchemeM }} component={BottomTabNavigator} />
 			{/* <AppStack.Screen name="SignInScreen" component={SignInScreen} /> */}
 			{/* <AppStack.Screen name="SignUpScreen" component={SignUpScreen} /> */}
 			<AppStack.Screen name="ProfileEditScreen" component={ProfileEditScreen} />

@@ -110,7 +110,6 @@ function Item({ id, name, active, idUser, nav }) {
         console.log(data);
 
         showToast("Departamento alterado com sucesso!")
-        nav.goBack()
     }
 
     const deleteDepartment = async id => {
@@ -119,7 +118,6 @@ function Item({ id, name, active, idUser, nav }) {
         console.log(data);
 
         showToast("Departamento excluído com sucesso!")
-        nav.goBack()
     }
 
     return (

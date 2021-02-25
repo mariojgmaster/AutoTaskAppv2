@@ -2,6 +2,7 @@ import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
+import { ColorSchemeName } from 'react-native';
 
 import Colors from '../constants/Colors';
 import DashBoardScreen from '../screens/DashBoardScreen';
@@ -10,13 +11,12 @@ import DevicesScreen from '../screens/DevicesScreen';
 import ScheaduleScreen from '../screens/ScheaduleScreen';
 
 const BottomTab = createBottomTabNavigator();
-export default function BottomTabNavigator() {
-
+export default function BottomTabNavigator({ route }) {
 	return (
-		<BottomTab.Navigator initialRouteName="DashBoardScreen" tabBarOptions={{ activeTintColor: Colors.TabBar.buttonActive }}>
+		<BottomTab.Navigator initialRouteName="DashBoardScreen" tabBarOptions={{ activeTintColor: route.params.colorScheme === 'dark' ? '#AACCFF99' : Colors.TabBar.buttonActive }}>
 
 			<BottomTab.Screen
-				name="DashBoard"
+				name="Sensores"
 				component={DashBoardScreen}
 				options={{
 					tabBarIcon: ({ color }) => <TabBarIconType2 name="dashboard" color={color} />,

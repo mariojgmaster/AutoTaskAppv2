@@ -81,7 +81,7 @@ export default class DevicesEditScreen extends React.Component {
                                             this.state.UserData.administrador == true ||
                                             this.state.deviceData.length == 0 ?
                                             <Item id={item.id}
-                                                idUser={this.state.UserData.id}
+                                                idUser={item.usuarioCadastro.id}
                                                 name={item.nome}
                                                 active={item.ativo}
                                                 turnedOn={item.ligado}

@@ -206,7 +206,7 @@ export default class ScheaduleScreen extends React.Component {
         function IsListEmptyMessage(props) {
             return (
                 <View style={styles.itemsContainer_box}>
-                    <View style={{ padding: 10, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ padding: 10, alignItems: 'center', justifyContent: 'center', marginTop:10 }}>
                         <Text style={{ color: 'rgba(255,255,255,0.4)', fontSize: 18, textAlign: 'center' }}>Não há {props.valor} a serem exibidos.</Text>
                     </View>
                 </View>
@@ -235,20 +235,20 @@ export default class ScheaduleScreen extends React.Component {
                                         refreshing={this.state.isLoading}
                                         onRefresh={this.getData}
                                         renderItem={({ item, index }) => (
-                                            // (item.usuarioCadastro.id == this.state.UserData.id ||
-                                            //     this.state.UserData.administrador == true ||
-                                            //     this.state.deviceData.length == 0 ?
+                                            (item.usuarioCadastro.id == this.state.UserData.id ||
+                                                this.state.scheaduleData.length == 0 ?
                                             <Item id={item.id}
-                                                // idUser={this.state.UserData.id}
+                                                idUser={this.state.UserData.id}
                                                 name={item.nome}
                                                 rules={item.regras}
-                                                // active={item.ativo}
+                                                active={item.ativo}
+                                                deviceId={item.equipamento.id}
                                                 // turnedOn={item.ligado}
                                                 // idDepartment={item.departamento.id}
-                                                // path={item.path}
+                                                path={item.path}
                                                 nav={this.props.navigation} />
-                                            //     :
-                                            // (index == this.state.deviceData.length - 1 ? <IsListEmptyMessage valor="Dispositivos" /> : null))
+                                                :
+                                            (index == this.state.scheaduleData.length - 1 ? <IsListEmptyMessage valor="Agendamentos" /> : null))
                                         )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                             }
                         </View>
@@ -267,101 +267,69 @@ const showToast = text => {
     )
 }
 
-// function ToScheadule({ name, nav }) {
-//     const [fieldNameValue, setFieldNameValue] = useState(name)
-//     return (
-//         <View style={styles.itemsContainer_box}>
-//             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', paddingHorizontal: 20, borderBottomWidth: 2, borderBottomColor: '#55555555', marginBottom: 20, paddingVertical: 10, marginTop: 20 }}>
-//                 <Entypo name="text" size={28} color='#CCC' />
-//                 <TextInput
-//                     style={{ width: layouts.window.width * 0.5, marginLeft: 20, paddingVertical: 10, marginBottom: 15, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', fontSize: 18 }}
-//                     onChangeText={value => setFieldNameValue(value)} placeholder='Título'
-//                     secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
-//             </View>
-//             <View style={{flexDirection:'row', marginBottom: 30}}>
-//                 <View style={{ flex:7, alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft:20}}>
-//                     <PickerDateTime nav={nav} dateOrTimeMode="time" titleSch={fieldNameValue}/>
-//                     <PickerDateTime nav={nav} dateOrTimeMode="date" titleSch={fieldNameValue}/>
-//                 </View>
-//                 <TouchableOpacity style={{flex:1, justifyContent:'center', paddingRight:10}} onPress={() => alert()}>
-//                         <FontAwesome5 name="save" size={28} color='#00990055' />
-//                 </TouchableOpacity>
-//             </View>
-//         </View>
-//     )
-// }
+function Item({ id, name, active, turnedOn, idUser, idDepartment, deviceId, path, rules, nav }) {
 
-function Item({ id, name, active, turnedOn, idUser, idDepartment, path, rules, nav }) {
+    const [fieldActiveValue, setFieldActiveValue] = useState(active)
+
+    const saveScheaduleChanges = async (id, name, userId, equipamentoId, isActive, regras) => {
+        let payload = {
+            id: id,
+            usuarioCadastro: { id: userId },
+            equipamento: { id: equipamentoId },
+            nome: name,
+            ativo: isActive,
+            regras: regras
+        }
+        console.log('payload');
+        console.log(payload);
+        console.log('---');
+        let res = await axios.put(`${Api.EndPoint.URL}/agendamentos/${id}`, payload);
+        let data = res.data;
+        console.log(data);
+
+        showToast("Agendamento " + (isActive ? 'Ligado' : 'Desligado'))
+    }
+
+    const deleteScheadule = async id => {
+        let res = await axios.delete(`${Api.EndPoint.URL}/agendamentos/${id}`);
+        let data = res.data;
+        console.log(data);
+        showToast("Agendamento excluído com sucesso!")
+    }
+
     return (
         <View style={[styles.itemsContainer_box, { marginTop: 10, marginBottom: 10 }]}>
 
-            <View style={{ paddingVertical: 10 }}>
-                <Text style={{ color: '#EEE', fontSize: 18 }}>{name}</Text>
-                <Text style={{ color: '#EEE', fontSize: 14 }}>{formataDataHora(new Date(rules), 'date')}  -  {formataDataHora(new Date(rules), 'time')}</Text>
-            </View>
-
-            {/* <View style={styles.itemContainer}>
-                <View style={styles.imgContainer}>
-                    <TabBarIconType2 name="home" color={'#CCC'} />
-                </View>
-                <TextInput
-                    style={{ width: layouts.window.width * 0.5, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555' }}
-                    onChangeText={value => setFieldNameValue(value)} placeholder='Departamento'
-                    secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
-            </View>
-
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
-                <View style={styles.itemContainer}>
-                    <View style={styles.imgContainer}>
-                        <TabBarIconType5 name="online-prediction" color={'#CCC'} />
+            <View style={{ paddingTop: 10, width:'100%', alignItems: 'center', justifyContent: 'center', }}>
+                <View style={{flexDirection:'row', paddingHorizontal: 15, paddingVertical: 10,}}>
+                    <View style={[styles.imgContainer, {flex:1, alignItems: 'center', justifyContent: 'center',}]}>
+                        <FontAwesome size={36} name="calendar" color={'#CCC'} />
                     </View>
+                    <View style={{flex:8, alignItems: 'center', justifyContent: 'center'}}>
+                        <Text style={{ color: '#EEE', fontSize: 22, textAlign:'center' }}>{name}</Text>
+                        <View style={{flexDirection: 'row', paddingTop:10}}>
+                            <Text style={{ color: '#DDD', fontSize: 16, textDecorationLine:'underline' }}>{formataDataHora(new Date(rules), 'date')}</Text>
+                            <Text style={{ color: '#EEE', fontSize: 14, marginHorizontal: 10, }}>às</Text>
+                            <Text style={{ color: '#DDD', fontSize: 16, textDecorationLine:'underline' }}>{formataDataHora(new Date(rules), 'time')}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'space-around', paddingTop:15, width:'70%', borderTopWidth:1, borderTopColor:'#55555588', marginTop:15}}>
                     <Switch
                         trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
                         thumbColor="#BBB"
-                        onValueChange={() => setFieldActiveValue(!fieldActiveValue)}
+                        onValueChange={() => {
+                            setFieldActiveValue(!fieldActiveValue)
+                            saveScheaduleChanges(id, name, idUser, deviceId, !fieldActiveValue, rules)
+                        }}
                         value={fieldActiveValue}
                         style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
                     />
-                </View>
-
-                <View style={styles.itemContainer}>
-                    <View style={styles.imgContainer}>
-                        <TabBarIconType2 name="poweroff" color={'#CCC'} />
-                    </View>
-                    <Switch
-                        trackColor={{ false: "#DDD", true: "rgba(0,150,0,0.8)" }}
-                        thumbColor="#BBB"
-                        onValueChange={() => setFieldTurnedOnValue(!fieldTurnedOnValue)}
-                        value={fieldTurnedOnValue}
-                        style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-                    />
+                    <TouchableWithoutFeedback onPress={() => deleteScheadule(id)}>
+                        <FontAwesome size={28} name="times" color={'#990000AA'} />
+                    </TouchableWithoutFeedback>
                 </View>
             </View>
-
-            <View style={{ width: '100%', paddingTop: 10, paddingBottom: 5, paddingHorizontal: 20, justifyContent: 'space-around', alignItems: 'center', flexDirection: 'row' }}>
-                <TouchableWithoutFeedback onPress={() =>
-                    Alert.alert(
-                        "Deseja salvar as alterações?", '',
-                        [
-                            { text: "Sim", onPress: () => saveDeviceChanges(id, idUser, idDepartment, path) },
-                            { text: "Não", style: 'cancel', onPress: () => console.log('Cancelar Salvamento de Departamento') }
-                        ], { cancelable: true }
-                    )}>
-                    <Text style={{ color: '#EEE', fontSize: 16, marginTop: 5 }}>Salvar</Text>
-                </TouchableWithoutFeedback>
-
-                <TouchableWithoutFeedback onPress={() => {
-                    Alert.alert(
-                        "Deseja excluir sua conta?", '',
-                        [
-                            { text: "Excluir", onPress: () => deleteDevice(id) },
-                            { text: "Cancelar", style: 'cancel', onPress: () => console.log('Cancelar Exclusão de Departamento') }
-                        ], { cancelable: true }
-                    )
-                }}>
-                    <Text style={{ color: 'rgba(255,0,0,0.8)', fontSize: 16, marginTop: 5 }}>Excluir</Text>
-                </TouchableWithoutFeedback>
-            </View> */}
         </View>
     )
 }
@@ -425,9 +393,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     imgContainer: {
-        width: 32,
-        height: 32,
-        borderRadius: 32,
+        width: 40,
+        height: 40,
+        borderRadius: 40,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 16,
