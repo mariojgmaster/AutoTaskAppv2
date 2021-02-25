@@ -1,4 +1,4 @@
-import { Ionicons, AntDesign, MaterialCommunityIcons, Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, AntDesign, MaterialCommunityIcons, Entypo, MaterialIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as React from 'react';
@@ -30,87 +30,130 @@ import images from '../constants/images';
 import colors from '../constants/Colors';
 import { useLinkProps } from '@react-navigation/native';
 
+const saveSchedule = async (idUsuario, idEquipamento, nome, ativo, regras) => {
+    if ((nome != undefined && ativo != undefined && regras != undefined) && (nome != '' && ativo != '' && regras != '')) {
+        let payload = {
+            UsuarioCadastro: { Id: idUsuario },
+            Equipamento: { Id: idEquipamento },
+            Nome: nome,
+            Ativo: ativo,
+            Regras: regras
+        }
+        console.log('payload');
+        console.log(payload);
+        console.log('---');
+        let res = await axios.post(`${Api.EndPoint.URL}/agendamentos`, payload);
+        let data = res.data;
+        console.log(data);
+    
+        showToast("Agendamento criado com sucesso!")
+    } else {
+        showToast("Preencha os campos corretamente!")
+    }
+}
+
+const formataDataHora = (valorDateTime, type) => {
+    let retorno = ''
+    if (type == 'time') {
+        let auxHora, auxMinuto
+        let hora, minuto
+        auxHora = valorDateTime.getHours()
+        auxMinuto = valorDateTime.getMinutes()
+        auxHora < 10 ? hora = `0${auxHora}` : hora = auxHora
+        auxMinuto < 10 ? minuto = `0${auxMinuto}` : minuto = auxMinuto
+        retorno = `${hora} : ${minuto}`
+    } else {
+        let auxDia, auxMes
+        let dia, mes, ano
+        auxDia = valorDateTime.getDate()
+        auxMes = valorDateTime.getMonth() + 1
+        auxDia < 10 ? dia = `0${auxDia}` : dia = auxDia
+        auxMes < 10 ? mes = `0${auxMes}` : mes = auxMes
+        ano = valorDateTime.getYear() + 1900
+        retorno = `${dia} / ${mes} / ${ano}`
+    }
+    return retorno
+}
+
 const PickerDateTime = (props) => {
-    const [fieldNameValue, setFieldNameValue] = useState(props.titleSch);
+    // const [fieldNameValue, setFieldNameValue] = useState(props.titleSch);
+    const [fieldNameValue, setFieldNameValue] = useState('')
     const [date, setDate] = useState(new Date());
-    const [formattedDate, setFormattedDate] = useState(props.dateOrTimeMode == 'time' ? 'Hora' : 'Data');
+    const [mode, setMode] = useState('date');
+    const [formattedTime, setFormattedTime] = useState(formataDataHora(date,'time'));
+    const [formattedDate, setFormattedDate] = useState(formataDataHora(date,'date'));
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
         if (selectedDate == undefined) { setShow(false); return; }
         let currentDate = selectedDate || date;
-        // setFieldNameValue(props.titleSch)
         setShow(false);
         setDate(currentDate);
 
-
-        if (props.dateOrTimeMode == 'time') {
-            let auxHora, auxMinuto
-            let hora, minuto
-            auxHora = currentDate.getHours()
-            auxMinuto = currentDate.getMinutes()
-            auxHora < 10 ? hora = `0${auxHora}` : hora = auxHora
-            auxMinuto < 10 ? minuto = `0${auxMinuto}` : minuto = auxMinuto
-            setFormattedDate(`${hora} : ${minuto}`);
-        } else {
-            let auxDia, auxMes
-            let dia, mes, ano
-            auxDia = currentDate.getDate()
-            auxMes = currentDate.getMonth() + 1
-            auxDia < 10 ? dia = `0${auxDia}` : dia = auxDia
-            auxMes < 10 ? mes = `0${auxMes}` : mes = auxMes
-            ano = currentDate.getYear() + 1900
-            setFormattedDate(`${dia} / ${mes} / ${ano}`);
-        }
+        mode == 'time' ?
+            setFormattedTime(formataDataHora(currentDate, mode)):
+            setFormattedDate(formataDataHora(currentDate, mode))
 
         console.log('date')
         console.log(date)
-        // Usar para trazer a data e a hora (1º Forma)
-        console.log('selectedDate')
-        console.log(selectedDate)
-
-        // Usar para trazer a data e a hora (2º Forma)
-        // console.log(event.nativeEvent.timestamp)
-        // var a = new Date(event.nativeEvent.timestamp);
-        // var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        // var year = a.getFullYear();
-        // var month = months[a.getMonth()];
-        // var date = a.getDate();
-        // var hour = a.getHours();
-        // var min = a.getMinutes();
-        // var sec = a.getSeconds();
-        // var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-        // console.log(time)
     };
+
 
     return (
         <View>
             <View>
-                {
-                    props.dateOrTimeMode == 'time' ?
-                        <TouchableWithoutFeedback onPress={() => setShow(true)}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 5, paddingBottom: 10 }}>
-                                <AntDesign name="clockcircleo" size={28} color='#CCC' />
-                                <Text style={{ width: layouts.window.width * 0.45, fontSize: 20, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', marginLeft: 15, textAlign: 'center' }}>
-                                    {formattedDate}
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback> :
-                        <TouchableWithoutFeedback onPress={() => setShow(true)}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 5 }}>
-                                <MaterialIcons name="date-range" size={32} color='#CCC' />
-                                <Text style={{ width: layouts.window.width * 0.45, fontSize: 20, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', marginLeft: 15, textAlign: 'center' }}>
-                                    {formattedDate}
-                                </Text>
-                            </View>
-                        </TouchableWithoutFeedback>
-                }
+                <View style={styles.itemsContainer_box}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', paddingHorizontal: 20, borderBottomWidth: 2, borderBottomColor: '#55555555', marginBottom: 15, marginTop: 5 }}>
+                        <Entypo name="text" size={28} color='#CCC' />
+                        <TextInput
+                            style={{ width: layouts.window.width * 0.55, marginLeft: 20, paddingVertical: 10, marginBottom: 20, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', fontSize: 18 }}
+                            onChangeText={value => setFieldNameValue(value)} placeholder='Título'
+                            secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                        <View style={{ flex: 7, alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 20 }}>
+
+                            <TouchableWithoutFeedback onPress={() => (setShow(true), setMode('time'))}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 5, paddingBottom: 10 }}>
+                                    <AntDesign name="clockcircleo" size={28} color='#CCC' />
+                                    <Text style={{ width: layouts.window.width * 0.45, fontSize: 20, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', marginLeft: 15, textAlign: 'center' }}>
+                                        {formattedTime}
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+
+                            <TouchableWithoutFeedback onPress={() => (setShow(true), setMode('date'))}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 5 }}>
+                                    <MaterialIcons name="date-range" size={32} color='#CCC' />
+                                    <Text style={{ width: layouts.window.width * 0.45, fontSize: 20, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', marginLeft: 15, textAlign: 'center' }}>
+                                        {formattedDate}
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+
+                            {/* <PickerDateTime nav={nav} dateOrTimeMode="time" titleSch={fieldNameValue}/>
+                            <PickerDateTime nav={nav} dateOrTimeMode="date" titleSch={fieldNameValue}/> */}
+                        </View>
+                        <TouchableOpacity
+                            style={{ flex: 1, justifyContent: 'center', paddingRight:15, paddingTop:20 }}
+                            onPress={() => {
+                                saveSchedule(props.idUsuario, props.idEquipamento[0], fieldNameValue, true, date)
+                                setTimeout(() => {
+                                    setFieldNameValue('')
+                                    setFormattedTime(formataDataHora(new Date(),'time'))
+                                    setFormattedDate(formataDataHora(new Date(),'date'))
+                                }, 500);
+                            }}>
+                            <FontAwesome5 name="check" size={36} color='#00990088' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
             {show && (
                 <DateTimePicker
                     timeZoneOffsetInSeconds={10800}
                     value={date}
-                    mode={props.dateOrTimeMode}
+                    mode={mode}
                     display='default'
                     is24Hour={true}
                     minimumDate={new Date()}
@@ -139,11 +182,20 @@ export default class ScheaduleScreen extends React.Component {
             }
         } catch (e) { console.log('Error "@UserEmail": ' + e) }
 
+        // await axios.get(`${Api.EndPoint.URL}/agendamentos`)
+        //     .then(res => {
+        //         console.log(res.data)
+        //         this.setState({ scheaduleData: res.data })
+        //     })
+        //     .then(res => this.setState({ isLoading: false }))
+        //     .catch(err => console.error(`Erro no Get de departamentos: ${err}`))
+        this.getData()
+    }
+
+    getData = async () => {
         await axios.get(`${Api.EndPoint.URL}/agendamentos`)
             .then(res => {
-                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
                 console.log(res.data)
-                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
                 this.setState({ scheaduleData: res.data })
             })
             .then(res => this.setState({ isLoading: false }))
@@ -168,29 +220,35 @@ export default class ScheaduleScreen extends React.Component {
                     </View>
                     <View style={styles.listContainer}>
                         <View style={{ flex: 1, paddingHorizontal: 20 }}>
-                            <ToScheadule nav={this.props.navigation} />
+                            <PickerDateTime
+                                nav={this.props.navigation}
+                                idUsuario={this.state.UserData.id}
+                                idEquipamento={[4,5]}
+                            />
                         </View>
-                        <View style={{ flex: 3, borderTopWidth: 1, marginTop: 70, borderTopColor: '#55555555' }}>
+                        <View style={{ flex: 3, borderTopWidth: 1, marginTop: 80, borderTopColor: '#55555555', marginBottom:50 }}>
                             {
                                 !this.state.isLoading ?
                                     <FlatList
                                         keyExtractor={(item, index) => index.toString()}
                                         data={this.state.scheaduleData}
+                                        refreshing={this.state.isLoading}
+                                        onRefresh={this.getData}
                                         renderItem={({ item, index }) => (
                                             // (item.usuarioCadastro.id == this.state.UserData.id ||
                                             //     this.state.UserData.administrador == true ||
                                             //     this.state.deviceData.length == 0 ?
-                                                <Item id={item.id}
-                                                    // idUser={this.state.UserData.id}
-                                                    name={item.nome}
-                                                    rules={item.regras}
-                                                    // active={item.ativo}
-                                                    // turnedOn={item.ligado}
-                                                    // idDepartment={item.departamento.id}
-                                                    // path={item.path}
-                                                    nav={this.props.navigation} />
-                                                //     :
-                                                // (index == this.state.deviceData.length - 1 ? <IsListEmptyMessage valor="Dispositivos" /> : null))
+                                            <Item id={item.id}
+                                                // idUser={this.state.UserData.id}
+                                                name={item.nome}
+                                                rules={item.regras}
+                                                // active={item.ativo}
+                                                // turnedOn={item.ligado}
+                                                // idDepartment={item.departamento.id}
+                                                // path={item.path}
+                                                nav={this.props.navigation} />
+                                            //     :
+                                            // (index == this.state.deviceData.length - 1 ? <IsListEmptyMessage valor="Dispositivos" /> : null))
                                         )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                             }
                         </View>
@@ -209,36 +267,37 @@ const showToast = text => {
     )
 }
 
-function ToScheadule({ name, nav }) {
-    const [fieldNameValue, setFieldNameValue] = useState(name)
-    return (
-        <View style={styles.itemsContainer_box}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', paddingHorizontal: 20, borderBottomWidth: 2, borderBottomColor: '#55555555', marginBottom: 20, paddingVertical: 10, marginTop: 20 }}>
-                <Entypo name="text" size={28} color='#CCC' />
-                <TextInput
-                    style={{ width: layouts.window.width * 0.5, marginLeft: 20, paddingVertical: 10, marginBottom: 15, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', fontSize: 18 }}
-                    onChangeText={value => setFieldNameValue(value)} placeholder='Título'
-                    secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
-            </View>
-            <View style={{flexDirection:'row', marginBottom: 30}}>
-                <View style={{ flex:7, alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft:20}}>
-                    <PickerDateTime nav={nav} dateOrTimeMode="time" titleSch={fieldNameValue}/>
-                    <PickerDateTime nav={nav} dateOrTimeMode="date" titleSch={fieldNameValue}/>
-                </View>
-                <TouchableOpacity style={{flex:1, justifyContent:'center', paddingRight:10}} onPress={() => alert()}>
-                        <FontAwesome5 name="save" size={28} color='#00990055' />
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
+// function ToScheadule({ name, nav }) {
+//     const [fieldNameValue, setFieldNameValue] = useState(name)
+//     return (
+//         <View style={styles.itemsContainer_box}>
+//             <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', paddingHorizontal: 20, borderBottomWidth: 2, borderBottomColor: '#55555555', marginBottom: 20, paddingVertical: 10, marginTop: 20 }}>
+//                 <Entypo name="text" size={28} color='#CCC' />
+//                 <TextInput
+//                     style={{ width: layouts.window.width * 0.5, marginLeft: 20, paddingVertical: 10, marginBottom: 15, color: '#AAA', borderBottomWidth: 1, borderBottomColor: '#555', fontSize: 18 }}
+//                     onChangeText={value => setFieldNameValue(value)} placeholder='Título'
+//                     secureTextEntry={false} defaultValue={fieldNameValue} placeholderTextColor="#555" />
+//             </View>
+//             <View style={{flexDirection:'row', marginBottom: 30}}>
+//                 <View style={{ flex:7, alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft:20}}>
+//                     <PickerDateTime nav={nav} dateOrTimeMode="time" titleSch={fieldNameValue}/>
+//                     <PickerDateTime nav={nav} dateOrTimeMode="date" titleSch={fieldNameValue}/>
+//                 </View>
+//                 <TouchableOpacity style={{flex:1, justifyContent:'center', paddingRight:10}} onPress={() => alert()}>
+//                         <FontAwesome5 name="save" size={28} color='#00990055' />
+//                 </TouchableOpacity>
+//             </View>
+//         </View>
+//     )
+// }
+
 function Item({ id, name, active, turnedOn, idUser, idDepartment, path, rules, nav }) {
     return (
-        <View style={[styles.itemsContainer_box, {marginTop:20}]}>
+        <View style={[styles.itemsContainer_box, { marginTop: 10, marginBottom: 10 }]}>
 
             <View style={{ paddingVertical: 10 }}>
                 <Text style={{ color: '#EEE', fontSize: 18 }}>{name}</Text>
-                <Text style={{ color: '#EEE', fontSize: 14 }}>{rules}</Text>
+                <Text style={{ color: '#EEE', fontSize: 14 }}>{formataDataHora(new Date(rules), 'date')}  -  {formataDataHora(new Date(rules), 'time')}</Text>
             </View>
 
             {/* <View style={styles.itemContainer}>

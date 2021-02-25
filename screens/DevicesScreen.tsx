@@ -44,6 +44,10 @@ export default class DevicesScreen extends React.Component {
             }
         } catch (e) { console.log('Error "@UserEmail": ' + e) }
 
+        this.getData()
+    }
+
+    getData = async () => {
         await axios.get(`${Api.EndPoint.URL}/equipamentos`)
             .then(res => {
                 console.log(res.data)
@@ -75,6 +79,8 @@ export default class DevicesScreen extends React.Component {
                                 <FlatList
                                     keyExtractor={(item, index) => index.toString()}
                                     data={this.state.deviceData}
+                                    refreshing={this.state.isLoading}
+                                    onRefresh={this.getData}
                                     renderItem={({ item, index }) => (
                                         ((item.usuarioCadastro.id == this.state.UserData.id || this.state.deviceData.length == 0) &&
                                             item.ativo == true ?
@@ -100,7 +106,7 @@ const showToast = text => {
     ToastAndroid.showWithGravity(
         text,
         ToastAndroid.LONG,
-        ToastAndroid.BOTTOM
+        ToastAndroid.CENTER
     )
 }
 
@@ -108,37 +114,19 @@ function Item({ id, name, active, turnedOn, idUser, idDepartment, path, nav }) {
 
     const [fieldTurnedOnValue, setFieldTurnedOnValue] = useState(turnedOn)
 
-    const saveDeviceChanges = async (id, idUsuario, idDepartamento, nome, ativo, ligado, devicePath) => {
-        // let payload = {
-        //     EquipamentoId: id,
-        //     Ligado: fieldTurnedOnValue
-        // }
-
-
-        // ----------------------------------- TESTE -----------------------------------------------
-        let payloadToTest = {
-            id: id,
-            usuarioCadastro: { id: idUsuario },
-            departamento: { id: idDepartamento },
-            nome: nome,
-            ativo: ativo,
-            ligado: ligado,
-            path: devicePath
+    const saveDeviceChanges = async (id, isTurnedOn) => {
+        let payload = {
+            EquipamentoId: id,
+            Ligado: isTurnedOn
         }
-        console.log('payloadToTest');
-        console.log(payloadToTest);
+        console.log('payload');
+        console.log(payload);
         console.log('---');
-        let res = await axios.put(`${Api.EndPoint.URL}/equipamentos/${id}`, payloadToTest);
-        // ----------------------------------- TESTE -----------------------------------------------
-
-        // console.log('payload');
-        // console.log(payload);
-        // console.log('---');
-        // let res = await axios.put(`${Api.EndPoint.URL}/equipamentos/comando`, payload); // TODO: Falar com Alex sobre retorno 400 deste endpoint
+        let res = await axios.post(`${Api.EndPoint.URL}/equipamentos/comando`, payload);
         let data = res.data;
         console.log(data);
 
-        showToast("Equipamento " + (!fieldTurnedOnValue ? 'Ligado' : 'Desligado'))
+        showToast("Equipamento " + (isTurnedOn ? 'Ligado' : 'Desligado'))
     }
 
     return (
@@ -161,8 +149,7 @@ function Item({ id, name, active, turnedOn, idUser, idDepartment, path, nav }) {
                             thumbColor="#BBB"
                             onValueChange={() => {
                                 setFieldTurnedOnValue(!fieldTurnedOnValue)
-                                alert(!fieldTurnedOnValue)
-                                saveDeviceChanges(id, idUser, idDepartment, name, active, !fieldTurnedOnValue, path)
+                                saveDeviceChanges(id, !fieldTurnedOnValue)
                             }}
                             value={fieldTurnedOnValue}
                             style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}

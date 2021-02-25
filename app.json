@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "autotaskapp_v2",
-    "slug": "autotaskapp_v2",
+    "name": "AutoTask",
+    "slug": "autotask",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -29,6 +29,7 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": "Projeto construído como TCC do curso de Analise e Desenvolvimento de Sistemas\n(Mário Oliveira [Front-End] - Alex Mello [Back-End])"
   }
 }
