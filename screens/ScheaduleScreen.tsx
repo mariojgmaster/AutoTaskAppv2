@@ -85,6 +85,7 @@ const PickerDateTime = (props) => {
     const [show, setShow] = useState(false);
 
     const onChange = (event, selectedDate) => {
+        console.log(event.type)
         if (selectedDate == undefined) { setShow(false); return; }
         let currentDate = selectedDate || date;
         setShow(false);

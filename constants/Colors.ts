@@ -41,4 +41,8 @@ export default {
 		text: alternativeText,
 		background: '#161530',
 	},
+	isActiveSignal: {
+		active: '#00FF0088',
+		inactive: '#EEEEEE88',
+	},
 };
