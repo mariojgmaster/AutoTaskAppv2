@@ -7,11 +7,34 @@ const styles = StyleSheet.create({
     container: {
         height: layouts.window.height,
         padding: 20,
-        paddingTop: 40,
+        paddingTop: 30,
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: colors.DrawerContent.background,
         marginBottom:40,
+    },
+    bottomCardContainer: {
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-around',
+    },
+    valueText: {
+        flex:7,
+        flexDirection:'row',
+        alignItems:'flex-end',
+        justifyContent:'center',
+        paddingBottom: 15,
+    },
+    itemTextContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingRight: 10,
+        paddingBottom:10,
+    },
+    itemText: {
+        color: '#EEE',
+        fontSize:22,
+        textAlign:'center',
     },
     screenTitleContainer: {
         width: '100%',
@@ -19,7 +42,8 @@ const styles = StyleSheet.create({
     },
     screenTitle: {
         color: 'rgba(255,255,255,0.3)',
-        fontSize: 20, fontWeight: 'bold',
+        fontSize: 20,
+        fontWeight: 'bold',
     },
     itemsContainer_img: {
         alignItems: 'center',
@@ -57,7 +81,6 @@ const styles = StyleSheet.create({
     imgUser: {
         width: 40,
         height: 40,
-        // margin: 20,
         borderRadius: 40,
     },
     text: {

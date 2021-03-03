@@ -21,11 +21,7 @@ export default class DevicesScreen extends React.Component {
     async componentDidMount() {
         try {
             const UserData = await AsyncStorage.getItem('@UserData')
-            if (UserData !== null) {
-                let user_data = JSON.parse(UserData)
-                this.setState({ UserData: user_data })
-                console.log(this.state.UserData)
-            }
+            if (UserData !== null) { this.setState({ UserData: JSON.parse(UserData) }) }
         } catch (e) { console.log('Error "@UserEmail": ' + e) }
         this.getData()
     }
@@ -36,6 +32,7 @@ export default class DevicesScreen extends React.Component {
     }
 
     render() {
+        let devicesFilteredAux = [];
         return (
             <SafeAreaProvider>
                 <View style={styles.container}>
@@ -44,6 +41,10 @@ export default class DevicesScreen extends React.Component {
                     </View>
                     <View>
                         { !this.state.isLoading ?
+                            (this.state.deviceData.map((item, index) => {
+                                ((item.usuarioCadastro.id == this.state.UserData.id || this.state.deviceData.length == 0) && item.ativo == true) ?
+                                    devicesFilteredAux.push('-') : null
+                            }),
                             <FlatList
                                 keyExtractor={(item, index) => index.toString()}
                                 data={this.state.deviceData}
@@ -61,8 +62,8 @@ export default class DevicesScreen extends React.Component {
                                             path={item.path}
                                             nav={this.props.navigation}
                                             showToast={ShowToast} /> :
-                                        (index == this.state.deviceData.length - 1 ? <IsListEmptyMessage valor="Dispositivos" /> : null))
-                                )} /> : <ActivityIndicator style={{paddingTop:100}} size='large' color="#FFF" /> }
+                                            (index == devicesFilteredAux.length && devicesFilteredAux.length == 0 ? <IsListEmptyMessage valor="Equipamentos" /> : null))
+                                )} />) : <ActivityIndicator style={{paddingTop:100}} size='large' color="#FFF" /> }
                     </View>
                 </View>
             </SafeAreaProvider>

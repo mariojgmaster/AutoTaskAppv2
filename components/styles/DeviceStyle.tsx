@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     container: {
         height: layouts.window.height,
         padding: 20,
-        paddingTop: 40,
+        paddingTop: 30,
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: colors.DrawerContent.background,

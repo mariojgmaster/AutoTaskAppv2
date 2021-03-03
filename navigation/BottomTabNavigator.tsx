@@ -1,64 +1,38 @@
-import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { ColorSchemeName } from 'react-native';
 
 import Colors from '../constants/Colors';
 import DashBoardScreen from '../screens/DashBoardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DevicesScreen from '../screens/DevicesScreen';
 import ScheaduleScreen from '../screens/ScheaduleScreen';
+import Icon from '../components/Icon';
 
 const BottomTab = createBottomTabNavigator();
 export default function BottomTabNavigator({ route }) {
 	return (
-		<BottomTab.Navigator initialRouteName="DashBoardScreen" tabBarOptions={{ activeTintColor: route.params.colorScheme === 'dark' ? '#AACCFF99' : Colors.TabBar.buttonActive }}>
+		<BottomTab.Navigator initialRouteName="DashBoardScreen" tabBarOptions={{activeTintColor: route.params.colorScheme === 'dark' ? '#AACCFF99' : Colors.TabBar.buttonActive}}>
 
 			<BottomTab.Screen
 				name="Sensores"
 				component={DashBoardScreen}
-				options={{
-					tabBarIcon: ({ color }) => <TabBarIconType2 name="dashboard" color={color} />,
-				}}
-			/>
+				options={{ tabBarIcon: ({ color }) => <Icon type="AntDesign" style={{marginTop:3}} name="dashboard" size={24} color={color} /> }} />
 
 			<BottomTab.Screen
 				name="Dispositivos"
 				component={DevicesScreen}
-				options={{
-					tabBarIcon: ({ color }) => <TabBarIconType3 name="devices" color={color} />,
-				}}
-			/>
+				options={{ tabBarIcon: ({ color }) => <Icon type="MaterialCommunityIcons" style={{marginTop:3}} name="devices" size={24} color={color} /> }} />
 
 			<BottomTab.Screen
 				name="Agendar"
 				component={ScheaduleScreen}
-				options={{
-					tabBarIcon: ({ color }) => <TabBarIconType3 name="timer-outline" color={color} />,
-				}}
-			/>
+				options={{ tabBarIcon: ({ color }) => <Icon type="MaterialCommunityIcons" style={{marginTop:3}} name="timer-outline" size={24} color={color} /> }} />
 
 			<BottomTab.Screen
 				name="Perfil"
 				component={ProfileScreen}
-				options={{
-					tabBarIcon: ({ color }) => <TabBarIconType1 name="person-outline" color={color} />,
-				}}
-			/>
+				options={{ tabBarIcon: ({ color }) => <Icon type="Ionicons" style={{marginTop:3}} name="person-outline" size={24} color={color} /> }} />
 
 		</BottomTab.Navigator>
 	);
-}
-
-function TabBarIconType1(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-	return <Ionicons size={24} style={{ marginBottom: -3 }} {...props} />;
-}
-
-function TabBarIconType2(props: { name: React.ComponentProps<typeof AntDesign>['name']; color: string }) {
-	return <AntDesign size={24} style={{ marginBottom: -3 }} {...props} />;
-}
-
-function TabBarIconType3(props: { name: React.ComponentProps<typeof MaterialCommunityIcons>['name']; color: string }) {
-	return <MaterialCommunityIcons size={24} style={{ marginBottom: -3 }} {...props} />;
 }

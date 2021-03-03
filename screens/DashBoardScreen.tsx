@@ -1,19 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import {
-    StyleSheet,
-    Switch,
     Text,
-    TouchableOpacity,
-    Alert,
     View,
-    Image,
-    TouchableWithoutFeedback,
-    TextInput,
     FlatList,
-    ScrollView,
-    ActivityIndicator,
-    ToastAndroid
+    ActivityIndicator
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -24,7 +15,7 @@ import IsListEmptyMessage from "../components/IsListEmptyMessage";
 
 export default class DashBoardScreen extends React.Component {
 
-    state = { UserData: {}, DashBoardScreen: [], isLoading: true }
+    state = { UserData: {}, DashBoardScreen: [], isLoading: true, sensorsFiltered: [] }
 
     async componentDidMount() {
         try {
@@ -44,6 +35,7 @@ export default class DashBoardScreen extends React.Component {
     }
 
     render() {
+        let sensorsFilteredAux = [];
         return (
             <SafeAreaProvider>
                 <View style={styles.container}>
@@ -53,6 +45,10 @@ export default class DashBoardScreen extends React.Component {
                     <View style={styles.listContainer}>
                         {
                             !this.state.isLoading ?
+                                (this.state.DashBoardScreen.map((item, index) => {
+                                    (item.usuarioCadastro.id == this.state.UserData.id || this.state.DashBoardScreen.length == 0) ?
+                                        sensorsFilteredAux.push('-') : null
+                                }),
                                 <FlatList
                                     keyExtractor={(item, index) => index.toString()}
                                     data={this.state.DashBoardScreen}
@@ -62,12 +58,13 @@ export default class DashBoardScreen extends React.Component {
                                         ((item.usuarioCadastro.id == this.state.UserData.id || this.state.DashBoardScreen.length == 0) ?
                                             <SensorItem id={item.id}
                                                 idUser={this.state.UserData.id}
+                                                idDepartment=''
                                                 name={item.nome}
                                                 active={item.ativo}
                                                 path={item.path}
                                                 nav={this.props.navigation} /> :
-                                            (index == this.state.DashBoardScreen.length - 1 ? <IsListEmptyMessage valor="Sensores" /> : null))
-                                    )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
+                                                (index == sensorsFilteredAux.length && sensorsFilteredAux.length == 0 ? <IsListEmptyMessage valor="Sensores" /> : null))
+                                    )} />) : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
                 </View>
