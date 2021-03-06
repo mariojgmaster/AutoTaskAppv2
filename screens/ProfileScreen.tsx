@@ -1,22 +1,15 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-import { useState } from 'react';
-import { Text, TouchableOpacity, View, Image, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import images from '../constants/images';
-import colors from '../constants/Colors';
 import { ProfileStyle as styles } from '../components/Styles';
+import ItemMenu from "../components/ProfileItem";
 
-export default class ProfileScreen extends React.Component {
+export default class ProfileEditStyle extends React.Component {
 
-    state = {
-        userName: '',
-        isUserAdmin: false,
-    }
+    state = { userName: '', isUserAdmin: false }
 
     async componentDidMount() {
         try {
@@ -28,7 +21,6 @@ export default class ProfileScreen extends React.Component {
     render() {
         return (
             <SafeAreaProvider>
-                {/* <StatusBar hidden={true} /> */}
                 <View style={styles.container}>
                     <View style={styles.itemsContainer_img}>
                         <Image style={styles.imgUser} source={images.User.userUri} />
@@ -41,57 +33,13 @@ export default class ProfileScreen extends React.Component {
                         {
                             this.state.isUserAdmin ?
                                 [<ItemMenu key={0} title="Editar Departamentos" nav={this.props.navigation} screen="DepartmentEditScreen" isExit={false} />,
-                                <ItemMenu key={1} title="Editar Dispositivos" nav={this.props.navigation} screen="DevicesEditScreen" isExit={false} />] :
-                                null
+                                <ItemMenu key={1} title="Editar Dispositivos" nav={this.props.navigation} screen="DevicesEditScreen" isExit={false} />] : null
                         }
                         {/* <ItemMenu title="Configurações" nav={this.props.navigation} screen="SettingsScreen" isExit={false} /> */}
                         <ItemMenu title="Sair" nav={this.props.navigation} screen="" isExit={true} />
                     </View>
-                    {/* <ProfileNavigator /> */}
                 </View>
             </SafeAreaProvider>
         )
     }
-}
-
-function ItemMenu(props) {
-    return (
-        <TouchableWithoutFeedback
-            onPress={() => (!props.isExit) ? props.nav.navigate(props.screen) : userLogOut({isUserSignedIn:'false',showSignIn:'true'})}
-            style={styles.itemContainer}>
-            <View style={styles.itemContainer}>
-                <View style={styles.imgContainer}>
-                    {
-                        props.screen == 'ProfileEditScreen' ? <TabBarIconType3 name="account-edit-outline" color={colors.Profile.icon} /> :
-                            props.screen == 'DepartmentEditScreen' ? <TabBarIconType3 name="home-edit-outline" color={colors.Profile.icon} /> :
-                                props.screen == 'DevicesEditScreen' ? <TabBarIconType3 name="puzzle-edit-outline" color={colors.Profile.icon} /> :
-                                    // props.screen == 'SettingsScreen' ? <TabBarIconType1 name="settings-outline" color={colors.Profile.icon} /> :
-                                    props.screen == '' ? <TabBarIconType1 name="exit-outline" color={colors.Profile.icon} /> :
-                                        <TabBarIconType2 name="edit" color={colors.Profile.icon} />
-                    }
-                </View>
-                <Text style={styles.text}>{props.title}</Text>
-            </View>
-        </TouchableWithoutFeedback>
-    )
-}
-
-let userLogOut = async value => {
-    try {
-        await AsyncStorage.setItem('@isUserSignedIn', value.isUserSignedIn)
-        await AsyncStorage.setItem('@showSignIn', value.showSignIn)
-    }
-    catch (e) { console.log('Error "@UserEmail": ' + e) }
-}
-
-function TabBarIconType1(props: { name: React.ComponentProps<typeof Ionicons>['name']; color: string }) {
-    return <Ionicons size={26} style={{ marginBottom: -3 }} {...props} />;
-}
-
-function TabBarIconType2(props: { name: React.ComponentProps<typeof AntDesign>['name']; color: string }) {
-    return <AntDesign size={26} style={{ marginBottom: -3 }} {...props} />;
-}
-
-function TabBarIconType3(props: { name: React.ComponentProps<typeof MaterialCommunityIcons>['name']; color: string }) {
-    return <MaterialCommunityIcons size={26} style={{ marginBottom: -3 }} {...props} />;
 }

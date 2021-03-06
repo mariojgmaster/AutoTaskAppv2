@@ -37,9 +37,17 @@ const styles = StyleSheet.create({
         borderRadius: layouts.window.width * 0.03,
     },
     items_box: {
-        padding: 10,
         alignItems: 'center',
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingRight: 20,
+        paddingLeft: 10,
+    },
+    nameContainer: {
+        flex: 4,
         justifyContent: 'center',
+        alignItems: 'center',
     },
     itemText_box: {
         color: 'rgba(255,255,255,0.4)',

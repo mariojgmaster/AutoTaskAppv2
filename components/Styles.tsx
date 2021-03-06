@@ -3,5 +3,17 @@ import DeviceStyle from './styles/DeviceStyle';
 import SensorStyle from './styles/SensorStyle';
 import IsActiveSignalStyle from './styles/IsActiveSignalStyle';
 import ScheaduleStyle from './styles/ScheaduleStyle';
+import ProfileEditStyle from './styles/ProfileEditStyle';
+import DepartmentEditStyle from './styles/DepartmentEditStyle';
+import DevicesEditStyle from './styles/DevicesEditStyle';
 
-export { ProfileStyle, DeviceStyle, SensorStyle, IsActiveSignalStyle, ScheaduleStyle }
+export {
+    ProfileStyle,
+    DeviceStyle,
+    SensorStyle,
+    IsActiveSignalStyle,
+    ScheaduleStyle,
+    ProfileEditStyle,
+    DepartmentEditStyle,
+    DevicesEditStyle,
+}

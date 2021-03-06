@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(255,255,255,0.05)',
         borderRadius: layouts.window.width * 0.03,
     },
+    itemBoxContainer: {
+        flexDirection: 'row',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+    },
     itemContainer: {
         width: '100%',
         flexDirection: 'row',
@@ -64,8 +69,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 5,
-        marginBottom: 10,
+        marginBottom: 5,
     },
     itemTextInput: {
         width: layouts.window.width * 0.55,
@@ -107,19 +111,42 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         textAlign: 'center',
     },
+    switchContainer_box: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingTop: 15,
+        paddingHorizontal: '10%',
+        width: '90%',
+        borderTopWidth: 1,
+        borderTopColor: '#55555588',
+        marginTop: 15,
+    },
     saveSchBtn: {
         flex: 1,
         justifyContent: 'center',
         paddingRight: 15,
         paddingTop: 20,
     },
-    imgContainer: {
-        width: 40,
-        height: 40,
-        borderRadius: 40,
+    dateTimeText_box: {
+        color: '#DDD',
+        fontSize: 14,
+        textDecorationLine: 'underline',
+    },
+    dateTimeText_box_as: {
+        color: '#EEE',
+        fontSize: 14,
+        marginHorizontal: 10,
+    },
+    iconContainer: {
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+    },
+    textContainer: {
+        flex: 6,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 16,
     },
     imgUser: {
         width: 140,

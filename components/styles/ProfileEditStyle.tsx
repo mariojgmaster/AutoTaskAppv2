@@ -6,7 +6,7 @@ import colors from '../../constants/Colors';
 const styles = StyleSheet.create({
     container: {
         height: layouts.window.height,
-        padding: 20,
+        paddingHorizontal: 20,
         paddingTop: 40,
         flexDirection: 'column',
         alignItems: 'center',
@@ -14,12 +14,24 @@ const styles = StyleSheet.create({
     },
     itemsContainer_img: {
         width: '100%',
+        flex: 1,
         alignItems: 'center',
     },
+    listContainer: {
+        flex: 3,
+        width: layouts.window.width,
+        paddingHorizontal: layouts.window.width * 0.1,
+        paddingBottom: 10,
+    },
     itemsContainer_box: {
-        paddingTop: 30,
+        marginTop: 15,
+        marginBottom: 10,
+        paddingVertical: 10,
         width: '100%',
         alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        borderRadius: layouts.window.width * 0.03,
     },
     itemContainer: {
         width: '100%',
@@ -38,26 +50,29 @@ const styles = StyleSheet.create({
         marginRight: 16,
     },
     imgUser: {
-        width: 100,
-        height: 100,
-        borderRadius: 100,
+        width: 140,
+        height: 140,
         margin: 20,
-    },
-    userNameContainer: {
-        width:layouts.window.width,
-        alignItems:'center',
-        justifyContent:'center',
-        paddingTop:10,
-    },
-    userNameText: {
-        color:colors.Profile.icon,
-        fontSize:16,
-        borderBottomWidth:3,
-        borderBottomColor:'#33333377',
+        borderRadius: 140,
     },
     text: {
         fontSize: 18,
         color: colors.DrawerContent.text,
+    },
+    inputs: {
+        width: '70%',
+        color: '#CCC',
+        borderBottomColor: '#CCC',
+        borderBottomWidth: 2,
+    },
+    ctrlBtns: {
+        width: '100%',
+        paddingTop: 10,
+        paddingBottom: 5,
+        paddingHorizontal: 20,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
 })
 

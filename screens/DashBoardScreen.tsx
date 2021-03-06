@@ -12,6 +12,7 @@ import DoGet from "../services/doGet";
 import SensorItem from "../components/SensorItem";
 import { SensorStyle as styles } from "../components/Styles";
 import IsListEmptyMessage from "../components/IsListEmptyMessage";
+import ShowToast from '../components/ShowToast';
 
 export default class DashBoardScreen extends React.Component {
 
@@ -30,7 +31,7 @@ export default class DashBoardScreen extends React.Component {
     }
 
     getData = async () => {
-        const dataGet = await DoGet('sensores')
+        const dataGet = await DoGet('sensores').catch(err => ShowToast('Holve um erro ao carregar sensores.'))
         dataGet != undefined ? this.setState({ DashBoardScreen: dataGet, isLoading: false }) : null
     }
 

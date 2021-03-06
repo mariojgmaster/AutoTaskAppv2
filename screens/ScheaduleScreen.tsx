@@ -22,7 +22,7 @@ export default class ScheaduleScreen extends React.Component {
     }
 
     getData = async () => {
-        const dataGet = await DoGet('agendamentos')
+        const dataGet = await DoGet('agendamentos').catch(err => ShowToast('Holve um erro ao carregar agendamentos.'))
         dataGet != undefined ? this.setState({ scheaduleData: dataGet, isLoading: false }) : null
     }
 
@@ -31,9 +31,6 @@ export default class ScheaduleScreen extends React.Component {
         return (
             <SafeAreaProvider>
                 <View style={styles.container}>
-                    {/* <View style={{ width: '100%', paddingBottom: 20 }}>
-                        <Text style={{ color: 'rgba(255,255,255,0.3)', fontSize: 20, fontWeight: 'bold' }}>AGENDAMENTOS</Text>
-                    </View> */}
                     <View style={styles.screenTitleContainer}>
                         <Text style={styles.screenTitle}>AGENDAMENTOS</Text>
                     </View>

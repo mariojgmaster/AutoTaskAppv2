@@ -19,18 +19,18 @@ export default function DeviceItem({ id, name, active, turnedOn, idUser, idDepar
             EquipamentoId: id,
             Ligado: isTurnedOn
         }
-        DoPost('equipamentos/comando', payload)
+        DoPost('equipamentos/comando', payload).catch(err => showToast('Holve um erro ao alterar equipamento.'))
         showToast("Equipamento " + (isTurnedOn ? 'Ligado' : 'Desligado'))
     }
 
     return (
         <View style={styles.itemsContainer_box}>
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingRight: 20, paddingLeft: 10 }}>
+            <View style={styles.items_box}>
                 <View style={[styles.itemsContainer_img, { flex: 1 }]}>
                     <Image style={styles.imgUser} source={images.Device.deviceUri} />
                 </View>
 
-                <View style={{ flex: 4, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={styles.nameContainer}>
                     <Text style={{ color: '#EEE', fontSize: 14 }}>{name}</Text>
                 </View>
 

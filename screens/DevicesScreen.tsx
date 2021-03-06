@@ -27,7 +27,7 @@ export default class DevicesScreen extends React.Component {
     }
 
     getData = async () => {
-        const dataGet = await DoGet('equipamentos')
+        const dataGet = await DoGet('equipamentos').catch(err => ShowToast('Holve um erro ao carregar equipamentos.'))
         dataGet != undefined ? this.setState({ deviceData: dataGet, isLoading: false }) : null
     }
 
