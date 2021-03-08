@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
-import { View, Image, FlatList, ActivityIndicator } from 'react-native';
+import { View, Image, FlatList, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import {DevicesEditStyle as styles} from "../../components/Styles";
 import DevicesEditItem from "../../components/DevicesEditItem";
+import ModalAdd from "../../components/ModalAdd";
 import IsListEmptyMessage from "../../components/IsListEmptyMessage";
 import images from '../../constants/images';
 import ShowToast from '../../components/ShowToast';
@@ -51,11 +52,13 @@ export default class DevicesEditScreen extends React.Component {
                                                 turnedOn={item.ligado}
                                                 idDepartment={item.departamento.id}
                                                 path={item.path}
-                                                nav={this.props.navigation} /> :
+                                                nav={this.props.navigation}
+                                                refresh={this.getData} /> :
                                                 (index == this.state.deviceData.length - 1 ? <IsListEmptyMessage valor="Dispositivos" /> : null))
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
+                    <ModalAdd addDeviceBtn={styles.addDeviceBtn} />
                 </View>
             </SafeAreaProvider>
         );

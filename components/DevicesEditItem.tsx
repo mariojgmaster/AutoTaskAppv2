@@ -8,7 +8,7 @@ import DoDelete from '../services/doDelete';
 import Icon from "./Icon";
 import layouts from '../constants/Layout';
 
-export default function DevicesEditItem({ id, name, active, turnedOn, idUser, idDepartment, path, nav }) {
+export default function DevicesEditItem({ id, name, active, turnedOn, idUser, idDepartment, path, nav, refresh }) {
 
     const [fieldNameValue, setFieldNameValue] = useState(name)
     const [fieldActiveValue, setFieldActiveValue] = useState(active)
@@ -26,7 +26,8 @@ export default function DevicesEditItem({ id, name, active, turnedOn, idUser, id
         DoPut(id, 'equipamentos', payload)
         .then(res => {
             ShowToast("Equipamento alterado com sucesso!")
-            nav.goBack()
+            // nav.goBack()
+            refresh()
         }).catch(err => ShowToast('Holve um erro ao alterar equipamento.'))
     }
 

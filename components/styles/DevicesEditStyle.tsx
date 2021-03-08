@@ -64,6 +64,11 @@ const styles = StyleSheet.create({
         borderBottomColor: colors.DrawerContent.text,
         borderBottomWidth: 2,
     },
+    addDeviceBtn: {
+        position: 'absolute',
+        right: 15,
+        bottom: 15,
+    },
 })
 
 export default styles;

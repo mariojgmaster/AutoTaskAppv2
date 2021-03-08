@@ -6,6 +6,7 @@ import ScheaduleStyle from './styles/ScheaduleStyle';
 import ProfileEditStyle from './styles/ProfileEditStyle';
 import DepartmentEditStyle from './styles/DepartmentEditStyle';
 import DevicesEditStyle from './styles/DevicesEditStyle';
+import ModalStyle from './styles/ModalStyle';
 
 export {
     ProfileStyle,
@@ -16,4 +17,5 @@ export {
     ProfileEditStyle,
     DepartmentEditStyle,
     DevicesEditStyle,
+    ModalStyle,
 }
