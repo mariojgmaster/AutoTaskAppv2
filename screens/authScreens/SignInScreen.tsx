@@ -14,14 +14,34 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import layouts from '../../constants/Layout';
 import images from '../../constants/images';
 import colors from '../../constants/Colors';
+import { AuthContext } from '../../contexts/AuthContext';
 
-export default function SignInScreen(props, { navigation }) {
+export default function SignInScreen({ navigation }) {
+
+    const { auth: { signIn } } = React.useContext(AuthContext)
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+
     return (
         <SafeAreaProvider>
             <View style={styles.mainContainer}>
                 <Logo />
-                <SignInForm signInData={props.signInData} />
-                <CallSignUp showSignIn={props.showSignIn} />
+
+                <View style={styles.signInFormContainer}>
+                    <TextInput style={[styles.signInInput, styles.signInInput_username]}
+                        placeholder="Usuário" onChangeText={value => setEmail(value)} value={email} />
+
+                    <TextInput style={[styles.signInInput, styles.signInInput_password]} secureTextEntry={true}
+                        onChangeText={value => setPassword(value)} placeholder="Senha" value={password} />
+
+                    <View style={styles.buttonSignInContainer}>
+                        <TouchableOpacity style={styles.buttonSignIn} onPress={() => signIn(email, password)}>
+                            <Text style={styles.buttonSignInText}>Entrar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <CallSignUp nav={navigation} />
             </View>
         </SafeAreaProvider>
     );
@@ -35,32 +55,10 @@ function Logo() {
     );
 }
 
-class SignInForm extends React.Component {
-
-    state = { userMail: '', userPass: '' }
-    userData = () => {return {userMail:this.state.userMail,userPass:this.state.userPass}}
-
-    render() {
-        return (
-            <View style={styles.signInFormContainer}>
-                <TextInput style={[styles.signInInput, styles.signInInput_username]}
-                    placeholder="E-mail" onChangeText={value => this.setState({ userMail: value })} />
-                <TextInput style={[styles.signInInput, styles.signInInput_password]} secureTextEntry={true}
-                    onChangeText={value => this.setState({ userPass: value })} placeholder="Senha" />
-                <View style={styles.buttonSignInContainer}>
-                    <TouchableOpacity style={styles.buttonSignIn} onPress={() => this.props.signInData(this.userData())}>
-                        <Text style={styles.buttonSignInText}>Entrar</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    }
-}
-
 function CallSignUp(props) {
     return (
         <View style={styles.callSignUpContainer}>
-            <TouchableWithoutFeedback onPress={() => props.showSignIn(false)} >
+            <TouchableWithoutFeedback onPress={() => props.nav.navigate('SignUp')} >
                 <Text style={styles.callSignUpLinkText}>Cadastrar Nova Conta</Text>
             </TouchableWithoutFeedback>
         </View>

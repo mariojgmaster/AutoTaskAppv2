@@ -6,22 +6,46 @@ import {
     View,
     Image,
     TouchableWithoutFeedback,
-    TextInput,
-    Alert,
+    TextInput
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import layouts from '../../constants/Layout';
 import images from '../../constants/images';
 import colors from '../../constants/Colors';
+import { AuthContext } from '../../contexts/AuthContext';
 
-export default function SignUpScreen(props, { navigation }) {
+export default function SignUpScreen({ navigation }) {
+
+    const { auth: { signUp } } = React.useContext(AuthContext)
+
+    const [name, setName] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [password, setPassword] = React.useState('')
+
     return (
         <SafeAreaProvider>
             <View style={styles.mainContainer}>
                 <Logo />
-                <SignUpForm signUpData={props.signUpData} />
-                <CallSignUp showSignIn={props.showSignIn} />
+
+                <View style={styles.signUpFormContainer}>
+                    <TextInput style={[styles.signUpInput, styles.signUpInput_name]}
+                        placeholder="Nome" onChangeText={value => setName(value)} value={name} />
+
+                    <TextInput style={[styles.signUpInput, styles.signUpInput_username]}
+                        placeholder="E-mail" onChangeText={value => setEmail(value)} value={email} />
+
+                    <TextInput style={[styles.signUpInput, styles.signUpInput_password]} secureTextEntry={true}
+                        onChangeText={value => setPassword(value)} placeholder="Senha" value={password} />
+
+                    <View style={styles.buttonSignUpContainer}>
+                        <TouchableOpacity style={styles.buttonSignUp} onPress={() => (signUp(name, email, password), navigation.goBack())}>
+                            <Text style={styles.buttonSignUpText}>Cadastrar</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <CallSignIn nav={navigation} />
             </View>
         </SafeAreaProvider>
     );
@@ -35,35 +59,11 @@ function Logo() {
     );
 }
 
-class SignUpForm extends React.Component {
-    
-    state = { userName: '', userMail: '', userPass: '' }
-    userData = () => {return {userName:this.state.userName,userMail:this.state.userMail,userPass:this.state.userPass}}
-
-    render() {
-        return (
-            <View style={styles.signUpFormContainer}>
-                <TextInput style={[styles.signUpInput, styles.signUpInput_name]}
-                    placeholder="Nome" onChangeText={value => this.setState({ userName: value })} />
-                <TextInput style={[styles.signUpInput, styles.signUpInput_username]}
-                    placeholder="E-mail" onChangeText={value => this.setState({ userMail: value })} />
-                <TextInput style={[styles.signUpInput, styles.signUpInput_password]} secureTextEntry={true}
-                    onChangeText={value => this.setState({ userPass: value })} placeholder="Senha" />
-                <View style={styles.buttonSignUpContainer}>
-                    <TouchableOpacity style={styles.buttonSignUp} onPress={() => this.props.signUpData(this.userData())}>
-                        <Text style={styles.buttonSignUpText}>Entrar</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    }
-}
-
-function CallSignUp(props) {
+function CallSignIn(props) {
     return (
         <View style={styles.callSignUpContainer}>
-            <TouchableWithoutFeedback onPress={() => props.showSignIn(false)} >
-                <Text style={styles.callSignUpLinkText}>Cadastrar Nova Conta</Text>
+            <TouchableWithoutFeedback onPress={() => props.nav.navigate('SignIn')} >
+                <Text style={styles.callSignUpLinkText}>Voltar para Login</Text>
             </TouchableWithoutFeedback>
         </View>
     );

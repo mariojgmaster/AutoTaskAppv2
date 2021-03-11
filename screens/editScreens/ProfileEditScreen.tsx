@@ -48,7 +48,8 @@ export default class DevicesEditScreen extends React.Component {
                                             isAdmin={item.administrador}
                                             isUserSisAdmin={this.state.UserDataSis.administrador}
                                             userIdSis={this.state.UserDataSis.id}
-                                            nav={this.props.navigation} />
+                                            nav={this.props.navigation}
+                                            refresh={this.getData} />
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>

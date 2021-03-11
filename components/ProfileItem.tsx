@@ -8,7 +8,7 @@ import colors from '../constants/Colors';
 export default function ItemMenu(props) {
     return (
         <TouchableWithoutFeedback
-            onPress={() => (!props.isExit) ? props.nav.navigate(props.screen) : userLogOut({ isUserSignedIn: 'false', showSignIn: 'true' })}
+            onPress={() => (!props.isExit) ? props.nav.navigate(props.screen) : props.signOut()}
             style={styles.itemContainer}>
             <View style={styles.itemContainer}>
                 <View style={styles.imgContainer}>
@@ -25,11 +25,4 @@ export default function ItemMenu(props) {
             </View>
         </TouchableWithoutFeedback>
     )
-}
-
-let userLogOut = async value => {
-    try {
-        await AsyncStorage.setItem('@isUserSignedIn', value.isUserSignedIn)
-        await AsyncStorage.setItem('@showSignIn', value.showSignIn)
-    } catch (e) { console.log('Error "@UserEmail": ' + e) }
 }

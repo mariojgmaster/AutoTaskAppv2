@@ -63,7 +63,9 @@ export default class DashBoardScreen extends React.Component {
                                                 name={item.nome}
                                                 active={item.ativo}
                                                 path={item.path}
-                                                nav={this.props.navigation} /> :
+                                                nav={this.props.navigation}
+                                                value={item.valor}
+                                                type={item.tipo} /> :
                                                 (index == sensorsFilteredAux.length && sensorsFilteredAux.length == 0 ? <IsListEmptyMessage valor="Sensores" /> : null))
                                     )} />) : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }

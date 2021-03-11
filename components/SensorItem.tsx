@@ -4,9 +4,18 @@ import { SensorStyle as styles } from './Styles';
 import Icon from "./Icon";
 import IsActiveSignal from "./IsActiveSignal";
 
-export default function SensorItem({ id, name, active, idUser, idDepartment, path, nav }) {
+export default function SensorItem({ id, name, active, idUser, idDepartment, path, nav, value, type }) {
 
-    const arrTestesUnidMeds = ['%', 'lux', 'ºC', 'dB', 'cm']
+    // const arrTestesUnidMeds = ['%', 'lux', 'ºC', 'dB', 'cm']
+
+    const getUnidade = tipo => {
+        switch (tipo) {
+            case 1: return('ºC') // Temperatura
+            // ...
+            case 7: return('lux') // Luminosidade
+            default: return('');
+        }
+    }
 
     return (
 
@@ -22,8 +31,8 @@ export default function SensorItem({ id, name, active, idUser, idDepartment, pat
                         <Icon type='AntDesign' name="wifi" size={40} color='#EEEEEE44' />
                     </View>
                     <View style={styles.valueText}>
-                        <Text style={{fontSize:60, color:'#CCCCCC77'}}>{Math.round(Math.random()*30+10)}</Text>
-                        <Text style={{fontSize:24, color:'#CCCCCC77', fontWeight:'bold'}}>{arrTestesUnidMeds[Math.round(Math.random()*4)]}</Text>
+                        <Text style={{fontSize:60, color:'#CCCCCC77'}}>{value}</Text>
+                        <Text style={{fontSize:24, color:'#CCCCCC77', fontWeight:'bold'}}>{getUnidade(type)}</Text>
                     </View>
                 </View>
         </View>

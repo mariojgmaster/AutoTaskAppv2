@@ -19,7 +19,7 @@ export default function DevicesEditItem({ id, name, active, turnedOn, idUser, id
             Id: id,
             UsuarioCadastro: { id: idUsuario },
             departamento: { id: idDepart },
-            Nome: fieldNameValue,
+            Nome: !fieldNameValue?name:fieldNameValue,
             Ativo: fieldActiveValue,
             ligado: fieldTurnedOnValue
         }
@@ -42,9 +42,9 @@ export default function DevicesEditItem({ id, name, active, turnedOn, idUser, id
     return (
         <View key={id} style={styles.itemsContainer_box}>
 
-            <View style={{ paddingVertical: 10 }}>
-                <Text style={{ color: '#EEE', fontSize: 18 }}>{name}</Text>
-            </View>
+            {/* <View style={{ padding: 10 }}>
+                <Text style={{color:'#EEE',fontSize:18,textAlign:'center'}}>{!fieldNameValue?name:fieldNameValue}</Text>
+            </View> */}
 
             <View style={styles.itemContainer}>
                 <View style={styles.imgContainer}>

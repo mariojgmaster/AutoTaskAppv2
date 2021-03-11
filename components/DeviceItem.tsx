@@ -1,18 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-    Switch,
-    Text,
-    View,
-    Image,
-    TouchableWithoutFeedback
-} from 'react-native';
+import { Switch, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import images from '../constants/images';
 import { DeviceStyle as styles } from './Styles';
 import DoPost from "../services/doPost";
 
 export default function DeviceItem({ id, name, active, turnedOn, idUser, idDepartment, path, nav, showToast }) {
-
     const [fieldTurnedOnValue, setFieldTurnedOnValue] = useState(turnedOn)
     const saveDeviceChanges = async (id, isTurnedOn) => {
         let payload = {

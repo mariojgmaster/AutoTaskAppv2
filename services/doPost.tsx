@@ -7,6 +7,7 @@ let DoPost = async (route, payload) => {
     console.log('payload / data from doPost');
     console.log(payload);
     console.log(data);
+    return (data)
 }
 
 export default DoPost;

@@ -8,7 +8,7 @@ import DoPut from '../services/doPut';
 import ShowToast from './ShowToast';
 import DoDelete from '../services/doDelete';
 
-export default function ProfileItem({ id, name, login, password, active, userIdSis, isAdmin, isUserSisAdmin, nav }) {
+export default function ProfileItem({ id, name, login, password, active, userIdSis, isAdmin, isUserSisAdmin, nav, refresh }) {
 
     const [fieldNameValue, setFieldNameValue] = useState(name)
     const [fieldLoginValue, setFieldLoginValue] = useState(login)
@@ -28,7 +28,8 @@ export default function ProfileItem({ id, name, login, password, active, userIdS
         .then(res => {
             ShowToast("Usuário alterado com sucesso!")
             id == idUser ? userData(payload) : null
-            nav.goBack()
+            // nav.goBack()
+            refresh()
         }).catch(err => ShowToast('Holve um erro ao alterar usuário.'))
     }
 
@@ -37,6 +38,7 @@ export default function ProfileItem({ id, name, login, password, active, userIdS
             DoDelete(id, 'usuarios')
             .then(res => ShowToast("Usuário excluído com sucesso!"))
             .catch(err => ShowToast('Holve um erro ao deletar usuário.'))
+            refresh()
         } catch (err) { console.log(err) }
     }
 
