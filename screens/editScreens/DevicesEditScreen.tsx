@@ -58,7 +58,7 @@ export default class DevicesEditScreen extends React.Component {
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
-                    <ModalAdd type="device" addDeviceBtn={styles.addDeviceBtn} />
+                    <ModalAdd refresh={this.getData} type="device" addDeviceBtn={styles.addDeviceBtn} />
                 </View>
             </SafeAreaProvider>
         );

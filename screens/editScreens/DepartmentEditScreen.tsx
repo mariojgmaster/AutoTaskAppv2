@@ -46,11 +46,12 @@ export default class DepartmentEditScreen extends React.Component {
                                             name={item.nome}
                                             active={item.ativo}
                                             deptsList={this.state.departmentData}
-                                            nav={this.props.navigation} />
+                                            nav={this.props.navigation}
+                                            refresh={this.getData} />
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
-                    <ModalAdd type="department" addDeviceBtn={styles.addDepartmentBtn} />
+                    <ModalAdd refresh={this.getData} type="department" addDeviceBtn={styles.addDepartmentBtn} />
                 </View>
             </SafeAreaProvider>
         );

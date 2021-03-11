@@ -5,7 +5,7 @@ import { ModalStyle as styles } from "./Styles";
 import CreateDevice from "./CreateDevice";
 import CreateDepartment from "./CreateDepartment";
 
-export default function ModalAdd({ addDeviceBtn, type }) {
+export default function ModalAdd({ addDeviceBtn, type, refresh }) {
 
     const [modalVisible, setModalVisible] = React.useState(false)
 
@@ -22,8 +22,8 @@ export default function ModalAdd({ addDeviceBtn, type }) {
                     </TouchableWithoutFeedback>
                     <View style={styles.container}>
                         {
-                            [type == 'device' ? <CreateDevice key={0} closeModal={() => setModalVisible(!modalVisible)} />:null,
-                            type == 'department' ? <CreateDepartment key={1} closeModal={() => setModalVisible(!modalVisible)} />:null]
+                            [type == 'device' ? <CreateDevice key={0} refresh={() => refresh()} closeModal={() => setModalVisible(!modalVisible)} />:null,
+                            type == 'department' ? <CreateDepartment key={1} refresh={() => refresh()} closeModal={() => setModalVisible(!modalVisible)} />:null]
                         }
                     </View>
                 </>

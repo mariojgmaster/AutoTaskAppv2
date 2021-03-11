@@ -8,7 +8,7 @@ import ShowToast from './ShowToast';
 import DoDelete from '../services/doDelete';
 import layouts from '../constants/Layout';
 
-export default function DepartmentItem({ id, name, active, idUser, nav }) {
+export default function DepartmentItem({ id, name, active, idUser, nav, refresh }) {
 
     const [fieldNameValue, setFieldNameValue] = useState(name)
     const [fieldActiveValue, setFieldActiveValue] = useState(active)
@@ -22,10 +22,11 @@ export default function DepartmentItem({ id, name, active, idUser, nav }) {
         }
         DoPut(id, 'departamentos', payload)
         .then(res => {
-            ShowToast("Departamento alterado com sucesso!")
-            nav.goBack()
+            ShowToast("Departamento criado com sucesso!")
+            // nav.goBack()
+            refresh()
         })
-        .catch(err => ShowToast('Holve um erro ao alterar departamento.'))
+        .catch(err => ShowToast('Holve um erro ao criar departamento.'))
     }
 
     const deleteDepartment = async id => {
@@ -33,6 +34,7 @@ export default function DepartmentItem({ id, name, active, idUser, nav }) {
             DoDelete(id, 'departamentos')
             .then(res => ShowToast("Departamento excluído com sucesso!"))
             .catch(err => ShowToast('Holve um erro ao deletar usuário.'))
+            refresh()
         } catch (err) { console.log(err) }
     }
 

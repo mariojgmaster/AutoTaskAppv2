@@ -36,6 +36,7 @@ export default function DevicesEditItem({ id, name, active, turnedOn, idUser, id
             DoDelete(id, 'equipamentos')
             .then(res => ShowToast("Equipamento excluído com sucesso!"))
             .catch(err => ShowToast('Holve um erro ao deletar equipamento.'))
+            refresh()
         } catch (err) { console.log(err) }
     }
 

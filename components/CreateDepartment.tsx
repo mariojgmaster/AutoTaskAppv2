@@ -7,7 +7,7 @@ import Icon from "./Icon";
 import layouts from '../constants/Layout';
 import DoPost from '../services/doPost';
 
-export default function DevicesEditItem({ closeModal }) {
+export default function DevicesEditItem({ closeModal, refresh }) {
 
     const [fieldNameValue, setFieldNameValue] = useState('')
     const [fieldUserIdValue, setFieldUserIdValue] = useState('')
@@ -23,6 +23,7 @@ export default function DevicesEditItem({ closeModal }) {
         .then(res => {
             ShowToast("Departamento criado com sucesso!")
             closeModal()
+            refresh()
         }).catch(err => ShowToast('Holve um erro ao criar departamento.'))
     }
 
