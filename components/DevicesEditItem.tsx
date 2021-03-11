@@ -25,7 +25,7 @@ export default function DevicesEditItem({ id, name, active, turnedOn, idUser, id
         }
         DoPut(id, 'equipamentos', payload)
         .then(res => {
-            ShowToast("Equipamento alterado com sucesso!")
+            ShowToast("Equipamento criado com sucesso!")
             // nav.goBack()
             refresh()
         }).catch(err => ShowToast('Holve um erro ao alterar equipamento.'))

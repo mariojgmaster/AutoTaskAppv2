@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DepartmentEditStyle as styles } from '../../components/Styles';
 import DepartmentItem from '../../components/DepartmentEditItem';
 
+import ModalAdd from "../../components/ModalAdd";
 import images from '../../constants/images';
 import DoGet from '../../services/doGet';
 import ShowToast from '../../components/ShowToast';
@@ -49,6 +50,7 @@ export default class DepartmentEditScreen extends React.Component {
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
+                    <ModalAdd type="department" addDeviceBtn={styles.addDepartmentBtn} />
                 </View>
             </SafeAreaProvider>
         );

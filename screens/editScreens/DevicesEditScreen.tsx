@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
-import { View, Image, FlatList, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import { View, Image, FlatList, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import {DevicesEditStyle as styles} from "../../components/Styles";
@@ -58,7 +58,7 @@ export default class DevicesEditScreen extends React.Component {
                                     )} /> : <ActivityIndicator style={{ paddingTop: 100 }} size='large' color="#FFF" />
                         }
                     </View>
-                    <ModalAdd addDeviceBtn={styles.addDeviceBtn} />
+                    <ModalAdd type="device" addDeviceBtn={styles.addDeviceBtn} />
                 </View>
             </SafeAreaProvider>
         );
